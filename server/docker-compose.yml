@@ -1,0 +1,28 @@
+services:
+  app:
+    build: .
+    container_name: "breve.ly"
+    restart: unless-stopped
+
+    ports: 
+      - "3333:3333"
+    environment:
+    - CLOUDFLARE_ACCOUNT_ID=${CLOUDFLARE_ACCOUNT_ID}
+    - CLOUDFLARE_ACCESS_KEY_ID=${CLOUDFLARE_ACCESS_KEY_ID}
+    - CLOUDFLARE_SECRET_ACCESS_KEY=${CLOUDFLARE_SECRET_ACCESS_KEY}
+    - CLOUDFLARE_BUCKET=${CLOUDFLARE_BUCKET}
+    - CLOUDFLARE_PUBLIC_URL=${CLOUDFLARE_PUBLIC_URL}\
+    - DATABASE_URL=${DATABASE_URL}
+
+  pg:
+    image: bitnami/postgresql:latest
+    container_name: "widget-pg"
+    restart: unless-stopped
+    ports:
+      - '5432:5432'
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+    volumes:
+      - './docker:/docker-entrypoint-initdb.d'
