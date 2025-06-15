@@ -7,6 +7,7 @@ import {
   serializerCompiler,
   validatorCompiler,
 } from 'fastify-type-provider-zod'
+import { env } from './env'
 
 
 export const server = fastify()
@@ -39,6 +40,6 @@ server.setErrorHandler((error, request, reply) => {
   console.log(error)
   return reply.status(500).send({ message: 'Internal Server Error' })
 })
-server.listen({ port: 3333, host: '0.0.0.0' }).then(() => {
-  console.log(`HTTP Server Running 3333!`)
+server.listen({ port: env.PORT, host: '0.0.0.0' }).then(() => {
+  console.log(`HTTP Server Running ${env.PORT}!`)
 })
