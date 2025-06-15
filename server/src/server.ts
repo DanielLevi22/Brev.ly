@@ -8,7 +8,7 @@ import {
   validatorCompiler,
 } from 'fastify-type-provider-zod'
 import { env } from './env'
-
+import { createLinkController } from './controllers/create-link'
 
 export const server = fastify()
 
@@ -30,6 +30,8 @@ server.register(fastifySwaggerUi, {
   routePrefix: '/docs',
 })
 
+
+server.register(createLinkController)
 server.setErrorHandler((error, request, reply) => {
   if (hasZodFastifySchemaValidationErrors(error)) {
     return reply
@@ -40,6 +42,8 @@ server.setErrorHandler((error, request, reply) => {
   console.log(error)
   return reply.status(500).send({ message: 'Internal Server Error' })
 })
+
+
 server.listen({ port: env.PORT, host: '0.0.0.0' }).then(() => {
   console.log(`HTTP Server Running ${env.PORT}!`)
 })
