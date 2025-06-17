@@ -1,5 +1,5 @@
 export interface Link {
-  shortKey: string;
+  shortUrl: string;
   originalUrl: string;
   accessCount: number;
   createdAt: Date;

@@ -1,9 +1,13 @@
-import { unwrapEither } from "@/shared/either";
+import { isLeft } from "@/shared/either";
 import { MakeCreateLinkUseCase } from "@/use-cases/factories/make-create-link-use-case";
 import type { FastifyPluginAsyncZod } from "fastify-type-provider-zod";
 import { z } from "zod";
-
-
+import { 
+  InvalidUrlError, 
+  InvalidShortUrlError, 
+  ShortUrlAlreadyExistsError, 
+  CreateLinkError 
+} from "@/shared/errors";
 
 export const createLinkController: FastifyPluginAsyncZod = async server => {
   server.post(
@@ -13,27 +17,70 @@ export const createLinkController: FastifyPluginAsyncZod = async server => {
         summary: 'Create Links',
         tags: ['Link'],
         body: z.object({
-          originalUrl: z.string().url(),
+          originalUrl: z.string().url('URL original deve ser uma URL válida'),
+          shortUrl: z.string()
+            .min(3, 'URL encurtada deve ter pelo menos 3 caracteres')
+            .max(20, 'URL encurtada deve ter no máximo 20 caracteres')
+            .regex(/^[a-zA-Z0-9_-]+$/, 'URL encurtada deve conter apenas letras, números, hífens e underscores')
         }),
         response: {
           200: z.object({
-            shortkey: z.string(),
+            shortUrl: z.string(),
+          }),
+          400: z.object({
+            error: z.string(),
+            type: z.string(),
+          }),
+          409: z.object({
+            error: z.string(),
+            type: z.string(),
+          }),
+          500: z.object({
+            error: z.string(),
+            type: z.string(),
           }),
         },
       },
     },
     async (request, reply) => {
-      const { originalUrl } = request.body
+      const { originalUrl, shortUrl } = request.body
    
-      const   makeCreateLinkUseCase = MakeCreateLinkUseCase()
-      const  result  = await  makeCreateLinkUseCase.execute({ originalUrl })
-      const response = unwrapEither(result)
-
-      if ('link' in response) {
-        return reply.status(200).send({ shortkey: response.link.shortKey })
+      const makeCreateLinkUseCase = MakeCreateLinkUseCase()
+      const result = await makeCreateLinkUseCase.execute({ originalUrl, shortUrl })
+      
+      if (isLeft(result)) {
+        const error = result.left
+        
+        if (error instanceof InvalidUrlError || error instanceof InvalidShortUrlError) {
+          return reply.status(400).send({ 
+            error: error.message, 
+            type: error.name 
+          })
+        }
+        
+        if (error instanceof ShortUrlAlreadyExistsError) {
+          return reply.status(409).send({ 
+            error: error.message, 
+            type: error.name 
+          })
+        }
+        
+        if (error instanceof CreateLinkError) {
+          return reply.status(500).send({ 
+            error: error.message, 
+            type: error.name 
+          })
+        }
+        
+        // Erro genérico
+        return reply.status(400).send({ 
+          error: error.message, 
+          type: 'UnknownError' 
+        })
       }
 
-      throw new Error('Erro ao criar link')
+      const response = result.right
+      return reply.status(200).send({ shortUrl: response.link.shortUrl })
     }
   )
 }

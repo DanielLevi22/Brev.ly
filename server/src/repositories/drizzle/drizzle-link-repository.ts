@@ -14,8 +14,8 @@ export class DrizzleLinkRepository implements LinkRepository {
     };
   }
 
-  async findByShortKey(shortKey: string): Promise<Link | null> {
-    const [link] = await db.select().from(links).where(eq(links.shortKey, shortKey));
+  async findByShortUrl(shortUrl: string): Promise<Link | null> {
+    const [link] = await db.select().from(links).where(eq(links.shortUrl, shortUrl));
     if (!link) return null;
     return {
       ...link,

@@ -2,6 +2,7 @@ POST http://localhost:3333/link
 Content-Type: application/json
 
 {
-    "originalUrl": "https://www.google.com"
+    "originalUrl": "https://www.google.com",
+    "shortUrl": "google"
 }
 

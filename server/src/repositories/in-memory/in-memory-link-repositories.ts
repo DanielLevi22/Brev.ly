@@ -9,8 +9,8 @@ export class InMemoryLinkRepository implements LinkRepository {
     return  data
   }
 
-  async findByShortKey(shortKey: string): Promise<Link | null> {
-    const link = this.items.find(item => item.shortKey === shortKey)
+  async findByShortUrl(shortUrl: string): Promise<Link | null> {
+    const link = this.items.find(item => item.shortUrl === shortUrl)
     return Promise.resolve(link || null)
   }
 }

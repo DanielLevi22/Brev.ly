@@ -1,9 +1,16 @@
 import { Link } from "@/entities/link";
 import { LinkRepository } from "@/repositories/link/link-repository";
 import { makeLeft, makeRight, type Either } from "@/shared/either";
+import { 
+  InvalidUrlError, 
+  InvalidShortUrlError, 
+  ShortUrlAlreadyExistsError, 
+  CreateLinkError 
+} from "@/shared/errors";
 
 interface CreateLinkRequest {
   originalUrl: string
+  shortUrl: string
 }
 
 interface CreateLinkResponse {
@@ -13,23 +20,26 @@ interface CreateLinkResponse {
 export class CreateLinkUseCase {
   constructor(private linkRepository: LinkRepository) {}
 
-  async execute({ originalUrl }: CreateLinkRequest): Promise<Either<Error, CreateLinkResponse>> {
+  async execute({ originalUrl, shortUrl }: CreateLinkRequest): Promise<Either<Error, CreateLinkResponse>> {
+
     try {
       new URL(originalUrl);
     } catch (error) {
-      return makeLeft(new Error('URL inválida'));
+      return makeLeft(new InvalidUrlError());
     }
 
-    const shortKey = this.generateShortKey();
-   
-    const existing = await this.linkRepository.findByShortKey(shortKey);
+    if (!this.isValidShortUrl(shortUrl)) {
+      return makeLeft(new InvalidShortUrlError());
+    }
+
+    const existing = await this.linkRepository.findByShortUrl(shortUrl);
    
     if (existing) {
-      return makeLeft(new Error('Chave curta já existe'));
+      return makeLeft(new ShortUrlAlreadyExistsError());
     } 
     
     const createLink: Link = { 
-      shortKey, 
+      shortUrl, 
       originalUrl, 
       accessCount: 0, 
       createdAt: new Date() 
@@ -39,11 +49,24 @@ export class CreateLinkUseCase {
       const link = await this.linkRepository.create(createLink);
       return makeRight({ link });
     } catch (error) {
-      return makeLeft(new Error('Erro ao criar link'));
+      return makeLeft(new CreateLinkError());
     }
   }
 
-  private generateShortKey(): string {
-    return Math.random().toString(36).slice(2, 8);
+  private isValidShortUrl(shortUrl: string): boolean {
+    if (!shortUrl || shortUrl.trim().length === 0) {
+      return false;
+    }
+
+    const validShortUrlPattern = /^[a-zA-Z0-9_-]+$/;
+    if (!validShortUrlPattern.test(shortUrl)) {
+      return false;
+    }
+
+    if (shortUrl.length < 3 || shortUrl.length > 20) {
+      return false;
+    }
+
+    return true;
   }
 }
