@@ -8,6 +8,11 @@ Content-Type: application/json
 
 ###
 
+# Incrementar contador de acessos de um link
+PATCH http://localhost:3333/link/google/access
+
+###
+
 # Listar todos os links cadastrados
 GET http://localhost:3333/links
 

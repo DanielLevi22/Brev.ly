@@ -5,4 +5,5 @@ export interface LinkRepository {
   findByShortUrl(shortUrl: string): Promise<Link | null>;
   delete(shortUrl: string): Promise<void>;
   findAll(): Promise<Link[]>;
+  incrementAccessCount(shortUrl: string): Promise<Link | null>;
 }

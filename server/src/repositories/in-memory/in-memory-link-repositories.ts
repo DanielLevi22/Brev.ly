@@ -29,4 +29,11 @@ export class InMemoryLinkRepository implements LinkRepository {
   async findAll(): Promise<Link[]> {
     return Promise.resolve([...this.items])
   }
+
+  async incrementAccessCount(shortUrl: string): Promise<Link | null> {
+    const link = this.items.find(item => item.shortUrl === shortUrl)
+    if (!link) return null
+    link.accessCount++
+    return link
+  }
 }

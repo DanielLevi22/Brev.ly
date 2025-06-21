@@ -12,6 +12,8 @@ import { createLinkController } from './controllers/create-link'
 import { deleteLinkController } from './controllers/delete-link'
 import { getOriginalUrlController } from './controllers/get-original-url'
 import { listAllLinksController } from './controllers/list-all-links'
+import { incrementAccessCountController } from './controllers/increment-access-count'
+import { routes } from './routes'
 
 export const server = fastify()
 
@@ -34,10 +36,8 @@ server.register(fastifySwaggerUi, {
 })
 
 
-server.register(createLinkController)
-server.register(deleteLinkController)
-server.register(getOriginalUrlController)
-server.register(listAllLinksController)
+server.register(routes)
+
 server.setErrorHandler((error, request, reply) => {
   if (hasZodFastifySchemaValidationErrors(error)) {
     return reply

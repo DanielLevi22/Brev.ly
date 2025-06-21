@@ -1,4 +1,4 @@
-import { eq } from 'drizzle-orm';
+import { eq, sql } from 'drizzle-orm';
 import { links } from '@/schemas/links';
 import { Link, CreateLinkData } from '@/entities/link';
 import { LinkRepository } from '../link/link-repository';
@@ -27,7 +27,18 @@ export class DrizzleLinkRepository implements LinkRepository {
   async findAll(): Promise<Link[]> {
     const allLinks = await db.select().from(links);
     return allLinks.map(link => ({
-      ...link
+      ...link,
     }));
+  }
+
+  async incrementAccessCount(shortUrl: string): Promise<Link | null> {
+    const [updated] = await db.update(links)
+      .set({ accessCount: sql`${links.accessCount} + 1` })
+      .where(eq(links.shortUrl, shortUrl))
+      .returning();
+    if (!updated) return null;
+    return {
+      ...updated,
+    };
   }
 }
