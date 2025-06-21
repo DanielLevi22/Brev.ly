@@ -8,6 +8,11 @@ Content-Type: application/json
 
 ###
 
+# Listar todos os links cadastrados
+GET http://localhost:3333/links
+
+###
+
 # Obter URL original de um link existente
 GET http://localhost:3333/link/google
 

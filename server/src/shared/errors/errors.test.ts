@@ -5,7 +5,8 @@ import {
   ShortUrlAlreadyExistsError, 
   CreateLinkError,
   DeleteLinkError,
-  LinkNotFoundError
+  LinkNotFoundError,
+  ListLinksError
 } from '../errors'
 
 describe('Custom Error Classes', () => {
@@ -107,6 +108,17 @@ describe('Custom Error Classes', () => {
     })
   })
 
+  describe('ListLinksError', () => {
+    it('should create error with default message', () => {
+      const error = new ListLinksError()
+      
+      expect(error).toBeInstanceOf(Error)
+      expect(error).toBeInstanceOf(ListLinksError)
+      expect(error.name).toBe('ListLinksError')
+      expect(error.message).toBe('Erro ao listar links')
+    })
+  })
+
   describe('Inheritance and Typing', () => {
     it('all classes should inherit from Error', () => {
       const errors = [
@@ -115,7 +127,8 @@ describe('Custom Error Classes', () => {
         new ShortUrlAlreadyExistsError(),
         new CreateLinkError(),
         new DeleteLinkError(),
-        new LinkNotFoundError()
+        new LinkNotFoundError(),
+        new ListLinksError()
       ]
 
       errors.forEach(error => {
@@ -131,7 +144,8 @@ describe('Custom Error Classes', () => {
         new ShortUrlAlreadyExistsError().name,
         new CreateLinkError().name,
         new DeleteLinkError().name,
-        new LinkNotFoundError().name
+        new LinkNotFoundError().name,
+        new ListLinksError().name
       ]
 
       const uniqueNames = new Set(errorNames)

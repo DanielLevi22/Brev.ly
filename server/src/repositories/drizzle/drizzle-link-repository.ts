@@ -16,11 +16,18 @@ export class DrizzleLinkRepository implements LinkRepository {
     const [link] = await db.select().from(links).where(eq(links.shortUrl, shortUrl));
     if (!link) return null;
     return {
-      ...link
+      ...link,
     };
   }
 
   async delete(shortUrl: string): Promise<void> {
     await db.delete(links).where(eq(links.shortUrl, shortUrl));
+  }
+
+  async findAll(): Promise<Link[]> {
+    const allLinks = await db.select().from(links);
+    return allLinks.map(link => ({
+      ...link
+    }));
   }
 }

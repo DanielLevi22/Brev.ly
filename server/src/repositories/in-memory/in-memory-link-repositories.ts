@@ -25,4 +25,8 @@ export class InMemoryLinkRepository implements LinkRepository {
       this.items.splice(index, 1)
     }
   }
+
+  async findAll(): Promise<Link[]> {
+    return Promise.resolve([...this.items])
+  }
 }
