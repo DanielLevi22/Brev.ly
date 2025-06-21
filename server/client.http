@@ -6,3 +6,17 @@ Content-Type: application/json
     "shortUrl": "google"
 }
 
+###
+
+# Deletar um link específico
+DELETE http://localhost:3333/link/google
+
+###
+
+# Deletar outro link
+DELETE http://localhost:3333/link/github
+
+###
+
+# Tentar deletar um link que não existe (deve retornar 404)
+DELETE http://localhost:3333/link/link-inexistente

@@ -1,6 +1,7 @@
-import { Link } from "@/entities/link";
+import { Link, CreateLinkData } from "@/entities/link";
 
 export interface LinkRepository {
-  create(link: Link): Promise<Link>;
+  create(data: CreateLinkData): Promise<Link>;
   findByShortUrl(shortUrl: string): Promise<Link | null>;
+  delete(shortUrl: string): Promise<void>;
 }

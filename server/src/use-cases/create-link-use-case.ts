@@ -20,7 +20,8 @@ interface CreateLinkResponse {
 export class CreateLinkUseCase {
   constructor(private linkRepository: LinkRepository) {}
 
-  async execute({ originalUrl, shortUrl }: CreateLinkRequest): Promise<Either<Error, CreateLinkResponse>> {
+  async execute({ originalUrl, shortUrl }: CreateLinkRequest): Promise<Either<
+  InvalidUrlError | InvalidShortUrlError  | ShortUrlAlreadyExistsError | CreateLinkError, CreateLinkResponse>> {
 
     try {
       new URL(originalUrl);
@@ -38,15 +39,8 @@ export class CreateLinkUseCase {
       return makeLeft(new ShortUrlAlreadyExistsError());
     } 
     
-    const createLink: Link = { 
-      shortUrl, 
-      originalUrl, 
-      accessCount: 0, 
-      createdAt: new Date() 
-    };
-    
     try {
-      const link = await this.linkRepository.create(createLink);
+      const link = await this.linkRepository.create({ shortUrl, originalUrl });
       return makeRight({ link });
     } catch (error) {
       return makeLeft(new CreateLinkError());

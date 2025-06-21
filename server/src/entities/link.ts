@@ -4,3 +4,5 @@ export interface Link {
   accessCount: number;
   createdAt: Date;
 }
+
+export type CreateLinkData = Omit<Link, 'createdAt' | 'accessCount'>;

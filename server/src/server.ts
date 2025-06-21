@@ -9,6 +9,7 @@ import {
 } from 'fastify-type-provider-zod'
 import { env } from './env'
 import { createLinkController } from './controllers/create-link'
+import { deleteLinkController } from './controllers/delete-link'
 
 export const server = fastify()
 
@@ -32,6 +33,7 @@ server.register(fastifySwaggerUi, {
 
 
 server.register(createLinkController)
+server.register(deleteLinkController)
 server.setErrorHandler((error, request, reply) => {
   if (hasZodFastifySchemaValidationErrors(error)) {
     return reply

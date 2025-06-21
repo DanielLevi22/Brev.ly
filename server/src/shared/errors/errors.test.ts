@@ -3,8 +3,10 @@ import {
   InvalidUrlError, 
   InvalidShortUrlError, 
   ShortUrlAlreadyExistsError, 
-  CreateLinkError 
-} from './errors'
+  CreateLinkError,
+  DeleteLinkError,
+  LinkNotFoundError
+} from '../errors'
 
 describe('Custom Error Classes', () => {
   describe('InvalidUrlError', () => {
@@ -83,13 +85,37 @@ describe('Custom Error Classes', () => {
     })
   })
 
+  describe('DeleteLinkError', () => {
+    it('should create error with default message', () => {
+      const error = new DeleteLinkError()
+      
+      expect(error).toBeInstanceOf(Error)
+      expect(error).toBeInstanceOf(DeleteLinkError)
+      expect(error.name).toBe('DeleteLinkError')
+      expect(error.message).toBe('Erro ao deletar link')
+    })
+  })
+
+  describe('LinkNotFoundError', () => {
+    it('should create error with default message', () => {
+      const error = new LinkNotFoundError()
+      
+      expect(error).toBeInstanceOf(Error)
+      expect(error).toBeInstanceOf(LinkNotFoundError)
+      expect(error.name).toBe('LinkNotFoundError')
+      expect(error.message).toBe('Link não encontrado')
+    })
+  })
+
   describe('Inheritance and Typing', () => {
     it('all classes should inherit from Error', () => {
       const errors = [
         new InvalidUrlError(),
         new InvalidShortUrlError(),
         new ShortUrlAlreadyExistsError(),
-        new CreateLinkError()
+        new CreateLinkError(),
+        new DeleteLinkError(),
+        new LinkNotFoundError()
       ]
 
       errors.forEach(error => {
@@ -103,7 +129,9 @@ describe('Custom Error Classes', () => {
         new InvalidUrlError().name,
         new InvalidShortUrlError().name,
         new ShortUrlAlreadyExistsError().name,
-        new CreateLinkError().name
+        new CreateLinkError().name,
+        new DeleteLinkError().name,
+        new LinkNotFoundError().name
       ]
 
       const uniqueNames = new Set(errorNames)
