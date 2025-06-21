@@ -10,6 +10,7 @@ import {
 import { env } from './env'
 import { createLinkController } from './controllers/create-link'
 import { deleteLinkController } from './controllers/delete-link'
+import { getOriginalUrlController } from './controllers/get-original-url'
 
 export const server = fastify()
 
@@ -34,6 +35,7 @@ server.register(fastifySwaggerUi, {
 
 server.register(createLinkController)
 server.register(deleteLinkController)
+server.register(getOriginalUrlController)
 server.setErrorHandler((error, request, reply) => {
   if (hasZodFastifySchemaValidationErrors(error)) {
     return reply

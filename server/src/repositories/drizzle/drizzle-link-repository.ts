@@ -9,8 +9,6 @@ export class DrizzleLinkRepository implements LinkRepository {
     const [newLink] = await db.insert(links).values(data).returning();
     return {
       ...newLink,
-      accessCount: newLink.accessCount ?? 0,
-      createdAt: newLink.createdAt ?? new Date()
     };
   }
 
