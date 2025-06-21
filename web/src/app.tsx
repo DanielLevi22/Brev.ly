@@ -1,6 +1,7 @@
 import { BrowserRouter } from 'react-router-dom';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { queryClient } from '@/lib/react-query';
+import { Home } from './pages/home';
 
 
 export function App() {
@@ -9,10 +10,10 @@ export function App() {
     <>
       <BrowserRouter>
         <QueryClientProvider client={queryClient}>
-          <h1 className="text-3xl text-blue-dark"> Hello World</h1>
+          <Home />
         </QueryClientProvider>
       </BrowserRouter>
     </>
   )
-}
+} 
 
