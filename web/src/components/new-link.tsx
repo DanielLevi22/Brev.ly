@@ -1,7 +1,10 @@
 import { Button } from "./button";
 import { Input } from "./input";
+import { useState } from "react";
 
 export function CreateNewLink() {
+  const [shortLink, setShortLink] = useState("");
+
   return (
     <section
       aria-labelledby="novo-link-heading"
@@ -16,7 +19,11 @@ export function CreateNewLink() {
 
       <form className="space-y-3">
         <Input label="link original" />
-        <Input label="link encurtado" />
+        <Input
+          label="link encurtado"
+          prefix="brev.ly/"
+         
+        />
         <Button type="submit" variant="primary" className="w-full">
           Salvar link
         </Button>

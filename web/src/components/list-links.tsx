@@ -1,6 +1,6 @@
 import { Link } from "@phosphor-icons/react";
 
-export function ListLinks(){
+export function MyLinks(){
   return(
     <section
       aria-labelledby="lista-links-heading"
