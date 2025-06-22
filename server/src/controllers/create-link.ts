@@ -71,15 +71,9 @@ export const createLinkController: FastifyPluginAsyncZod = async server => {
             type: error.name 
           })
         }
-        
-        // Erro genérico
-        return reply.status(400).send({ 
-          error: error.message, 
-          type: 'UnknownError' 
-        })
       }
 
-      const response = result.right
+      const response = result.right!
       return reply.status(200).send({ shortUrl: response.link.shortUrl })
     }
   )

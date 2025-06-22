@@ -1,19 +1,15 @@
-import { BrowserRouter } from 'react-router-dom';
+import { RouterProvider } from 'react-router-dom';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { queryClient } from '@/lib/react-query';
-import { Home } from './pages/home';
-
+import { router } from '@/routes';
+import { Toaster } from 'sonner';
 
 export function App() {
-
   return (
-    <>
-      <BrowserRouter>
-        <QueryClientProvider client={queryClient}>
-          <Home />
-        </QueryClientProvider>
-      </BrowserRouter>
-    </>
-  )
+    <QueryClientProvider client={queryClient}>
+      <Toaster richColors position="bottom-right" />
+      <RouterProvider router={router} />
+    </QueryClientProvider>
+  );
 } 
 

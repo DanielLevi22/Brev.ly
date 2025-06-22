@@ -31,6 +31,7 @@ export const deleteLinkController: FastifyPluginAsyncZod = async server => {
       },
     },
     async (request, reply) => {
+
       const { shortUrl } = request.params;
       const makeDeleteLinkUseCase = MakeDeleteLinkUseCase();
       const result = await makeDeleteLinkUseCase.execute({ shortUrl });

@@ -8,11 +8,6 @@ import {
   validatorCompiler,
 } from 'fastify-type-provider-zod'
 import { env } from './env'
-import { createLinkController } from './controllers/create-link'
-import { deleteLinkController } from './controllers/delete-link'
-import { getOriginalUrlController } from './controllers/get-original-url'
-import { listAllLinksController } from './controllers/list-all-links'
-import { incrementAccessCountController } from './controllers/increment-access-count'
 import { routes } from './routes'
 
 export const server = fastify()
@@ -20,13 +15,18 @@ export const server = fastify()
 server.setValidatorCompiler(validatorCompiler)
 server.setSerializerCompiler(serializerCompiler)
 
-server.register(fastifyCors, { origin: '*' })
+server.register(fastifyCors, { 
+  origin: '*',
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true
+})
 
 server.register(fastifySwagger, {
   openapi: {
     info: {
-      title: 'Upload Image API',
-      description: 'API for managing images',
+      title: 'Create Short url',
+      description: 'API for create short Url',
       version: '1.0.0',
     },
   },
@@ -46,7 +46,10 @@ server.setErrorHandler((error, request, reply) => {
   }
 
   console.log(error)
-  return reply.status(500).send({ message: 'Internal Server Error' })
+  return reply.status(500).send({ 
+    error: 'Internal Server Error', 
+    type: 'InternalServerError' 
+  })
 })
 
 
