@@ -52,13 +52,13 @@ server.setErrorHandler((error, request, reply) => {
     server.log.warn({ err: error, req: request }, 'Validation Error')
     return reply
       .status(400)
-      .send({ message: 'Validation Error', issues: error.validation })
+      .send({ error: 'Validation Error', type: 'ValidationError' })
   }
 
   server.log.error({ err: error, req: request }, 'Unhandled Error')
   return reply.status(500).send({ 
-    error: 'Internal Server Error', 
-    type: 'InternalServerError' 
+    error: error?.message || 'Internal Server Error', 
+    type: error?.name || 'InternalServerError' 
   })
 })
 

@@ -44,7 +44,9 @@
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
     "@types/sanitize-html": "^2.16.0",
+    "@types/supertest": "^6.0.3",
     "drizzle-kit": "^0.30.5",
+    "supertest": "^7.1.1",
     "tsup": "^8.4.0",
     "typescript": "^5.8.2",
     "vite-tsconfig-paths": "^5.1.4",
