@@ -11,8 +11,7 @@ describe('E2E - Generate Links Report', () => {
     await app.close();
   });
 
-  it('deve gerar e retornar a URL do relatório CSV', async () => {
-    // Cria alguns links antes de gerar o relatório
+  it('should generate and return the CSV report URL', async () => {
     await request(app.server)
       .post('/link')
       .send({ originalUrl: 'https://www.google.com', shortUrl: 'google' });

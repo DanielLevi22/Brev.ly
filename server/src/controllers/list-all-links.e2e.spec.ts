@@ -11,7 +11,7 @@ describe('E2E - List All Links', () => {
     await app.close();
   });
 
-  it('deve listar todos os links', async () => {
+  it('should list all links', async () => {
     // Cria alguns links antes de listar
     await request(app.server)
       .post('/link')
