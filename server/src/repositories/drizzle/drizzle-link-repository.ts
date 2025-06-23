@@ -25,7 +25,7 @@ export class DrizzleLinkRepository implements LinkRepository {
   }
 
   async findAll(): Promise<Link[]> {
-    const allLinks = await db.select().from(links);
+    const allLinks = await db.select().from(links).orderBy(sql`${links.createdAt} DESC`);
     return allLinks.map(link => ({
       ...link,
     }));
