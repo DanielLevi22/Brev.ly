@@ -6,7 +6,8 @@ import {
   CreateLinkError,
   DeleteLinkError,
   LinkNotFoundError,
-  ListLinksError
+  ListLinksError,
+  GenerateLinksReportError
 } from '../errors'
 
 describe('Custom Error Classes', () => {
@@ -119,6 +120,25 @@ describe('Custom Error Classes', () => {
     })
   })
 
+  describe('GenerateLinksReportError', () => {
+    it('should create error with default message', () => {
+      const error = new GenerateLinksReportError()
+      
+      expect(error).toBeInstanceOf(Error)
+      expect(error).toBeInstanceOf(GenerateLinksReportError)
+      expect(error.name).toBe('GenerateLinksReportError')
+      expect(error.message).toBe('Erro ao gerar relatório CSV dos links')
+    })
+
+    it('should create error with custom message', () => {
+      const customMessage = 'Falha ao gerar CSV'
+      const error = new GenerateLinksReportError(customMessage)
+      
+      expect(error.message).toBe(customMessage)
+      expect(error.name).toBe('GenerateLinksReportError')
+    })
+  })
+
   describe('Inheritance and Typing', () => {
     it('all classes should inherit from Error', () => {
       const errors = [
@@ -128,7 +148,8 @@ describe('Custom Error Classes', () => {
         new CreateLinkError(),
         new DeleteLinkError(),
         new LinkNotFoundError(),
-        new ListLinksError()
+        new ListLinksError(),
+        new GenerateLinksReportError()
       ]
 
       errors.forEach(error => {
@@ -145,7 +166,8 @@ describe('Custom Error Classes', () => {
         new CreateLinkError().name,
         new DeleteLinkError().name,
         new LinkNotFoundError().name,
-        new ListLinksError().name
+        new ListLinksError().name,
+        new GenerateLinksReportError().name
       ]
 
       const uniqueNames = new Set(errorNames)

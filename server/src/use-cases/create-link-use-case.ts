@@ -22,7 +22,6 @@ export class CreateLinkUseCase {
 
   async execute({ originalUrl, shortUrl }: CreateLinkRequest): Promise<Either<
   InvalidUrlError | InvalidShortUrlError  | ShortUrlAlreadyExistsError | CreateLinkError, CreateLinkResponse>> {
-
     try {
       new URL(originalUrl);
     } catch (error) {

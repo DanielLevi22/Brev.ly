@@ -18,7 +18,6 @@ export class ListAllLinksUseCase {
   async execute(): Promise<Either<ListLinksError, ListAllLinksResponse>> {
     try {
       const links = await this.linkRepository.findAll();
-      
       return makeRight({
         links: links.map(link => ({
           shortUrl: link.shortUrl,

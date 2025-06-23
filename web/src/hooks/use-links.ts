@@ -12,19 +12,16 @@ export const linkKeys = {
   originalUrl: (shortUrl: string) => [...linkKeys.all, 'originalUrl', shortUrl] as const,
 };
 
-// Hook para listar links
 export function useLinks() {
+
   return useQuery({
     queryKey: linkKeys.lists(),
     queryFn: api.listLinks,
-    staleTime: 1000 * 60 * 5, 
+    staleTime: 0, 
     gcTime: 1000 * 60 * 5, 
-    refetchOnWindowFocus: true,
-    refetchOnMount: true,
   });
 }
 
-// Hook para criar link
 export function useCreateLink() {
   const queryClient = useQueryClient();
 
@@ -41,7 +38,6 @@ export function useCreateLink() {
   });
 }
 
-// Hook para incrementar contador de acesso
 export function useIncrementAccess() {
   const queryClient = useQueryClient();
 
@@ -58,21 +54,16 @@ export function useIncrementAccess() {
   });
 }
 
-// Hook para obter URL original
-// Exemplo de uso:
-// const { data, isLoading, error } = useGetOriginalUrl('google', true);
-// if (data) console.log(data.originalUrl);
 export function useGetOriginalUrl(shortUrl: string, enabled: boolean = true) {
   return useQuery({
     queryKey: linkKeys.originalUrl(shortUrl),
     queryFn: () => api.getOriginalUrl(shortUrl),
     enabled: enabled && !!shortUrl,
-    staleTime: 1000 * 60 * 30, // 30 minutos
-    gcTime: 1000 * 60 * 60, // 1 hora
+    staleTime: 1000 * 60 * 30, 
+    gcTime: 1000 * 60 * 60, 
   });
 }
 
-// Hook para deletar link
 export function useDeleteLink() {
   const queryClient = useQueryClient();
 

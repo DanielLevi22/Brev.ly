@@ -9,8 +9,17 @@ import {
 } from 'fastify-type-provider-zod'
 import { env } from './env'
 import { routes } from './routes'
+import pino from 'pino'
 
-export const server = fastify()
+export const server = fastify({
+  logger: {
+    level: process.env.NODE_ENV === 'production' ? 'info' : 'debug',
+    transport: process.env.NODE_ENV !== 'production' ? {
+      target: 'pino-pretty',
+      options: { colorize: true }
+    } : undefined
+  }
+})
 
 server.setValidatorCompiler(validatorCompiler)
 server.setSerializerCompiler(serializerCompiler)
@@ -40,12 +49,13 @@ server.register(routes)
 
 server.setErrorHandler((error, request, reply) => {
   if (hasZodFastifySchemaValidationErrors(error)) {
+    server.log.warn({ err: error, req: request }, 'Validation Error')
     return reply
       .status(400)
       .send({ message: 'Validation Error', issues: error.validation })
   }
 
-  console.log(error)
+  server.log.error({ err: error, req: request }, 'Unhandled Error')
   return reply.status(500).send({ 
     error: 'Internal Server Error', 
     type: 'InternalServerError' 
@@ -54,5 +64,5 @@ server.setErrorHandler((error, request, reply) => {
 
 
 server.listen({ port: env.PORT, host: '0.0.0.0' }).then(() => {
-  console.log(`HTTP Server Running ${env.PORT}!`)
+  server.log.info(`HTTP Server Running ${env.PORT}!`)
 })

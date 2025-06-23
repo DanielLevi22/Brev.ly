@@ -21,7 +21,6 @@ export class GetOriginalUrlUseCase {
     if (!link) {
       return makeLeft(new LinkNotFoundError());
     }
-    
     return makeRight({
       originalUrl: link.originalUrl,
       shortUrl: link.shortUrl,

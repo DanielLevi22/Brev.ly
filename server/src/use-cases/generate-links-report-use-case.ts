@@ -1,13 +1,16 @@
-import { generateAndUploadLinksCsv } from '@/storage/generate-links-csv';
+import { type GenerateLinksCsvPort } from './ports/generate-links-csv-port';
 import { makeLeft, makeRight, type Either } from '@/shared/either';
+import { GenerateLinksReportError } from '@/shared/errors';
 
 export class GenerateLinksReportUseCase {
-  async execute(): Promise<Either<Error, { url: string }>> {
+  constructor(private readonly csvPort: GenerateLinksCsvPort) {}
+
+  async execute(): Promise<Either<GenerateLinksReportError, { url: string }>> {
     try {
-      const { url } = await generateAndUploadLinksCsv();
+      const { url } = await this.csvPort.generateAndUploadLinksCsv();
       return makeRight({ url });
     } catch (error) {
-      return makeLeft(error instanceof Error ? error : new Error('Erro ao gerar relatório CSV'));
+      return makeLeft(new GenerateLinksReportError(error instanceof Error ? error.message : undefined));
     }
   }
 } 

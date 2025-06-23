@@ -45,3 +45,8 @@ DELETE http://localhost:3333/link/github
 
 # Tentar deletar um link que não existe (deve retornar 404)
 DELETE http://localhost:3333/link/link-inexistente
+
+###
+
+# Gerar e baixar relatório CSV dos links
+GET http://localhost:3333/links/report

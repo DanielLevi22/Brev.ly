@@ -4,6 +4,7 @@ import { z } from "zod";
 import { isLeft } from "@/shared/either";
 import { LinkNotFoundError } from "../shared/errors";
 import { DeleteLinkError } from "../shared/errors";
+import { fastifyLoggerAdapter } from '@/shared/fastify-logger-adapter';
 
 export const deleteLinkController: FastifyPluginAsyncZod = async server => {
   server.delete(
@@ -31,12 +32,14 @@ export const deleteLinkController: FastifyPluginAsyncZod = async server => {
       },
     },
     async (request, reply) => {
-
       const { shortUrl } = request.params;
+      const logger = fastifyLoggerAdapter(request.log);
+      logger.info({ shortUrl }, 'Recebida requisição para deletar link');
       const makeDeleteLinkUseCase = MakeDeleteLinkUseCase();
       const result = await makeDeleteLinkUseCase.execute({ shortUrl });
 
       if (isLeft(result)) {
+        logger.warn({ error: result.left }, 'Erro ao deletar link');
         const error = result.left;
         if (error instanceof LinkNotFoundError) {
           return reply.status(404).send({ error: error.message, type: error.name });
@@ -46,6 +49,7 @@ export const deleteLinkController: FastifyPluginAsyncZod = async server => {
         }
         return reply.status(500).send({ error: 'Erro interno do servidor', type: 'InternalServerError' });
       }
+      logger.info({ shortUrl }, 'Link deletado com sucesso');
       return reply.status(200).send({ message: result.right.message });
     }
   );

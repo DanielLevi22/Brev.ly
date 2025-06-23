@@ -2,7 +2,8 @@ import { MakeListAllLinksUseCase } from "@/use-cases/factories/make-list-all-lin
 import type { FastifyPluginAsyncZod } from "fastify-type-provider-zod";
 import { z } from "zod";
 import { ListLinksError } from "@/shared/errors";
-import { isRight, isLeft } from "@/shared/either";
+import { isRight } from "@/shared/either";
+import { fastifyLoggerAdapter } from '@/shared/fastify-logger-adapter';
 
 export const listAllLinksController: FastifyPluginAsyncZod = async server => {
   server.get(
@@ -28,14 +29,18 @@ export const listAllLinksController: FastifyPluginAsyncZod = async server => {
         },
       },
     },
-    async (_, reply) => {
+    async (request, reply) => {
+      const logger = fastifyLoggerAdapter(request.log);
+      logger.info({}, 'Recebida requisição para listar todos os links');
       const makeListAllLinksUseCase = MakeListAllLinksUseCase();
       const result = await makeListAllLinksUseCase.execute();
 
       if (isRight(result)) {
+        logger.info({ total: result.right.total }, 'Links listados com sucesso');
         return reply.status(200).send(result.right);
       }
       
+      logger.error({ error: result.left }, 'Erro ao listar links');
       const error = result.left;
       if (error instanceof ListLinksError) {
         return reply.status(500).send({ error: error.message, type: error.name });
