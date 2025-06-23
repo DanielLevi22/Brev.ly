@@ -10,14 +10,6 @@ export function App() {
       <Toaster 
         richColors 
         position="bottom-right"
-        toastOptions={{
-          style: {
-            backgroundColor: '#f9f9fb', 
-            color: '#2c46b1',
-            border: 'none',
-            boxShadow: '0 4px 4px rgba(0,0,0,.25)' 
-          }
-        }}
       />
       <RouterProvider router={router} />
     </QueryClientProvider>

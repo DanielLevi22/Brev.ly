@@ -24,6 +24,34 @@ span + input:-webkit-autofill {
   -webkit-text-fill-color: #4d505c !important;
 }
 
+/* Estilos customizados para barra de rolagem azul */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #2c46b1;
+  border-radius: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #2c4091;
+}
+
+/* Animação de preenchimento da barra de progresso */
+@keyframes progressFill {
+  0% {
+    width: 0%;
+  }
+  100% {
+    width: 100%;
+  }
+}
+
 @theme {
   /* escala de cinzas */
   --color-grayscale-white:      #ffffff;

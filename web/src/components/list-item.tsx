@@ -30,7 +30,7 @@ export function ListItem({ link }: ListItemProps) {
       const shortUrl = `brev.ly/${link.shortUrl}`;
       await navigator.clipboard.writeText(shortUrl);
       setIsCopiedShort(true);
-      toast.success("Link copiado com sucesso", {
+      toast.info("Link copiado com sucesso", {
         description: `${link.shortUrl} foi copiado para a área de transferência.`
       });
       setTimeout(() => setIsCopiedShort(false), 2000);
@@ -45,31 +45,36 @@ export function ListItem({ link }: ListItemProps) {
   };
 
   return (
-    <div className="flex flex-col items-center gap-4">
-      <div className="border-t border-grayscale-200 py-3 flex items-center justify-between w-full">
-        <div className="space-y-1">
+    <div className="border-t border-grayscale-200 py-4">
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-3 items-center">
+        <div className="md:col-span-8 space-y-2">
           <p 
-            className="text-blue-base text-md font-semibold cursor-pointer hover:underline"
+            className="text-blue-base text-sm md:text-base font-semibold cursor-pointer hover:underline break-all"
             onClick={handleRedirect}
           >
             brev.ly/{link.shortUrl}
           </p>
-          <p className="text-sm text-grayscale-600 truncate max-w-xs">{link.originalUrl}</p>
+          <p className="text-xs md:text-sm text-grayscale-600 truncate">{link.originalUrl}</p>
         </div>
-        <p className="text-sm text-grayscale-500">{link.accessCount} acessos</p>
-        <div className="flex items-center justify-center gap-2">
-          <ButtonIcon 
-            variant="copy"
-            onClick={handleCopyShortUrl}
-            disabled={isCopiedShort}
-            title={isCopiedShort ? "Link copiado!" : "Copiar link"}
-          />
-          <ButtonIcon 
-            variant="delete"
-            onClick={handleDelete}
-            disabled={deleteLinkMutation.isPending}
-            title="Deletar link"
-          />
+        
+        <div className="md:col-span-4 flex items-center justify-between gap-2">
+          <p className="text-xs md:text-sm text-grayscale-500 font-medium whitespace-nowrap">
+            {link.accessCount} acessos
+          </p>
+          <div className="flex items-center gap-2">
+            <ButtonIcon 
+              variant="copy"
+              onClick={handleCopyShortUrl}
+              disabled={isCopiedShort}
+              title={isCopiedShort ? "Link copiado!" : "Copiar link"}
+            />
+            <ButtonIcon 
+              variant="delete"
+              onClick={handleDelete}
+              disabled={deleteLinkMutation.isPending}
+              title="Deletar link"
+            />
+          </div>
         </div>
       </div>
     </div>

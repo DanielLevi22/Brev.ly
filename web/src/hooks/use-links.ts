@@ -17,8 +17,10 @@ export function useLinks() {
   return useQuery({
     queryKey: linkKeys.lists(),
     queryFn: api.listLinks,
-    staleTime: 1000 * 60 * 5, // 5 minutos
-    gcTime: 1000 * 60 * 10, // 10 minutos (anteriormente cacheTime)
+    staleTime: 0, // Sempre stale para forçar refetch
+    gcTime: 1000 * 60 * 5, // 5 minutos
+    refetchOnWindowFocus: true,
+    refetchOnMount: true,
   });
 }
 
@@ -29,7 +31,6 @@ export function useCreateLink() {
   return useMutation({
     mutationFn: (data: CreateLinkRequest) => api.createLink(data),
     onSuccess: () => {
-      // Invalida a query de listagem para refetch
       queryClient.invalidateQueries({
         queryKey: linkKeys.lists(),
       });
@@ -47,7 +48,6 @@ export function useIncrementAccess() {
   return useMutation({
     mutationFn: (shortUrl: string) => api.incrementAccess(shortUrl),
     onSuccess: () => {
-      // Invalida a query de listagem para atualizar o contador
       queryClient.invalidateQueries({
         queryKey: linkKeys.lists(),
       });
