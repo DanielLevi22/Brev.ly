@@ -44,9 +44,6 @@ export const api = {
   async incrementAccess(shortUrl: string): Promise<void> {
     const response = await fetch(`${API_BASE_URL}/link/${shortUrl}/access`, {
       method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json',
-      },
     });
 
     if (!response.ok) {
@@ -58,9 +55,6 @@ export const api = {
   async getOriginalUrl(shortUrl: string): Promise<{ originalUrl: string }> {
     const response = await fetch(`${API_BASE_URL}/link/${shortUrl}`, {
       method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
     });
 
     return handleResponse<{ originalUrl: string }>(response);

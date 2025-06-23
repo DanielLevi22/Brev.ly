@@ -9,7 +9,7 @@ interface InputProps extends Omit<ComponentProps<'input'>, 'className'> {
 }
 
 export function Input({ label, error, className, prefix, ...props }: InputProps) {
-  const baseClasses = 'w-full px-3 py-2 border-[2px] outline-none transition-colors text-grayscale-600';
+  const baseClasses = 'w-full  py-2 border-[2px] outline-none transition-colors text-grayscale-600';
   
   const stateClasses = error 
     ? 'border-danger bg-red-50' 
@@ -41,8 +41,8 @@ export function Input({ label, error, className, prefix, ...props }: InputProps)
             stateClasses +
             ' peer ' +
             (prefix
-              ? 'rounded-l-none rounded-r-lg border-l-0 pl-2'
-              : 'rounded-lg')
+              ? 'rounded-l-none rounded-r-lg border-l-0 '
+              : 'rounded-lg px-3')
           }
           placeholder=" "
           {...props}

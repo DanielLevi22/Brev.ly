@@ -1,17 +1,20 @@
 import { createBrowserRouter } from 'react-router-dom';
-import { AppLayout } from '@/layouts/app-layout';
 import { HomePage } from '@/pages/home';
 import { ROUTES } from './constants';
+import { RedirectLink } from '@/pages/redirect-link';
+import { NotFound } from '@/pages/not-found';
 
 export const router = createBrowserRouter([
   {
-    path: ROUTES.HOME.path,
-    element: <AppLayout />,
-    children: [
-      {
-        index: true,
-        element: <HomePage />,
-      },
-    ],
+    path: '/',
+    element: <HomePage />,
+  },
+  {
+    path: ROUTES.REDIRECT_LINK.path,
+    element: <RedirectLink />,
+  },
+  {
+    path: ROUTES.NOT_FOUND.path,
+    element: <NotFound />,
   },
 ]); 

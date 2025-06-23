@@ -6,6 +6,16 @@ export const ROUTES: Record<string, AppRoute> = {
     name: 'Home',
     description: 'Página inicial do Brev.ly'
   },
+  REDIRECT_LINK: {
+    path: '/:shortKey',
+    name: 'Redirect - link',
+    description: 'Página de redirecionamento do link'
+  },
+  NOT_FOUND: {
+    path: '*',
+    name: 'Not Found',
+    description: 'Página 404 - Página não encontrada'
+  },
   // Exemplo de como adicionar novas rotas no futuro:
   // LINKS: {
   //   path: '/links',

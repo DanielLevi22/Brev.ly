@@ -10,7 +10,7 @@ interface ListItemProps {
 
 export function ListItem({ link }: ListItemProps) {
   const deleteLinkMutation = useDeleteLink();
-  const [isCopied, setIsCopied] = useState(false);
+  const [isCopiedShort, setIsCopiedShort] = useState(false);
 
  async function handleDelete () {
     if (confirm('Tem certeza que deseja deletar este link?')) {
@@ -25,20 +25,23 @@ export function ListItem({ link }: ListItemProps) {
     }
   };
 
- async function handleCopyOriginal  () {
+  async function handleCopyShortUrl() {
     try {
-      await navigator.clipboard.writeText(link.originalUrl);
-      setIsCopied(true);
-      toast.success("URL original copiada para a área de transferência!");
-      setTimeout(() => setIsCopied(false), 2000);
+      const shortUrl = `brev.ly/${link.shortUrl}`;
+      await navigator.clipboard.writeText(shortUrl);
+      setIsCopiedShort(true);
+      toast.success("Link copiado com sucesso", {
+        description: `${link.shortUrl} foi copiado para a área de transferência.`
+      });
+      setTimeout(() => setIsCopiedShort(false), 2000);
     } catch (error) {
-      console.error('Erro ao copiar URL original:', error);
-      toast.error("Erro ao copiar URL original");
+      console.error('Erro ao copiar short URL:', error);
+      toast.error("Erro ao copiar link");
     }
   };
 
   function handleRedirect()  {
-    window.open(link.originalUrl, '_blank');
+    window.open(`/${link.shortUrl}`);
   };
 
   return (
@@ -57,9 +60,9 @@ export function ListItem({ link }: ListItemProps) {
         <div className="flex items-center justify-center gap-2">
           <ButtonIcon 
             variant="copy"
-            onClick={handleCopyOriginal}
-            disabled={isCopied}
-            title={isCopied ? "URL original copiada!" : "Copiar URL original"}
+            onClick={handleCopyShortUrl}
+            disabled={isCopiedShort}
+            title={isCopiedShort ? "Link copiado!" : "Copiar link"}
           />
           <ButtonIcon 
             variant="delete"
