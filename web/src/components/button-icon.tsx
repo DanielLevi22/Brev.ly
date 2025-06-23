@@ -20,7 +20,7 @@ export function ButtonIcon({ variant = 'copy', ...props}: ButtonProps) {
 
   return (
     <button 
-      className="flex items-center justify-center p-2 rounded-lg bg-grayscale-200 hover:outline-2 hover:outline-blue-base shadow-custom "
+      className="flex items-center justify-center p-2 rounded-lg bg-grayscale-200 hover:outline-2 hover:outline-blue-base cursor-pointer shadow-custom "
       {...props}
     >
       {getIcon()}

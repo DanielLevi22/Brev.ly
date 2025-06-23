@@ -17,8 +17,8 @@ export function useLinks() {
   return useQuery({
     queryKey: linkKeys.lists(),
     queryFn: api.listLinks,
-    staleTime: 0, // Sempre stale para forçar refetch
-    gcTime: 1000 * 60 * 5, // 5 minutos
+    staleTime: 1000 * 60 * 5, 
+    gcTime: 1000 * 60 * 5, 
     refetchOnWindowFocus: true,
     refetchOnMount: true,
   });

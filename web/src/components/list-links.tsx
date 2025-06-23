@@ -14,10 +14,9 @@ export function MyLinks(){
       >
         <div className="absolute top-0 left-0 w-full h-1 bg-grayscale-200">
           <div 
-            className="h-full bg-blue-base transition-all duration-1000 ease-out"
+            className="h-full bg-blue-base"
             style={{
-              width: '0%',
-              animation: 'progressFill 2s ease-out forwards'
+              animation: 'progressFill 1.5s ease-in-out infinite'
             }}
           ></div>
         </div>

@@ -42,13 +42,16 @@ span + input:-webkit-autofill {
   background: #2c4091;
 }
 
-/* Animação de preenchimento da barra de progresso */
+/* Animação de preenchimento da barra de progresso em loop */
 @keyframes progressFill {
   0% {
     width: 0%;
   }
-  100% {
+  50% {
     width: 100%;
+  }
+  100% {
+    width: 0%;
   }
 }
 
