@@ -3,9 +3,11 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "dev": "docker-compose down && docker-compose up -d && tsx watch --env-file .env src/server.ts",
+    "dev": "docker-compose up -d && tsx watch --env-file .env src/server.ts",
     "build": "tsup-node",
     "start": "node dist/server.mjs",
+    "db:generate": "drizzle-kit generate",
+    "db:studio": "drizzle-kit studio",
     "migrate:dev": "dotenv -e .env -- drizzle-kit migrate",
     "migrate:test": "dotenv -e .env.test -- drizzle-kit migrate",
     "migrate:prod": "dotenv -e .env.production -- drizzle-kit migrate",
