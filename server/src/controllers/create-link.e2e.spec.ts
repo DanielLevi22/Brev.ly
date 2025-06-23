@@ -1,13 +1,9 @@
 import { describe, it, beforeAll, afterAll, expect } from 'vitest';
-import supertest from 'supertest';
-import { server } from '../server';
-import type { FastifyInstance } from 'fastify';
-
-let app: FastifyInstance;
+import request from 'supertest';
+import { app } from '../app';
 
 beforeAll(async () => {
-  await server.ready();
-  app = server;
+  await app.ready();
 });
 
 afterAll(async () => {
@@ -18,7 +14,7 @@ describe('E2E - Create Link', () => {
   it('should create a new link', async () => {
     // Ensure max 20 chars
     const shortUrl = 'e2e' + Date.now().toString().slice(-17);
-    const res = await supertest(app.server)
+    const res = await request(app.server)
       .post('/link')
       .send({ originalUrl: 'https://www.google.com', shortUrl });
     console.log('Response:', res.status, res.body);

@@ -13,7 +13,14 @@
     "test:watch": "dotenv -e .env.test -- vitest",
     "db:migrate:test": "dotenv -e .env.test -- drizzle-kit migrate",
     "pretest": "pnpm run db:migrate:test",
-    "pretest:watch": "pnpm run db:migrate:test"
+    "pretest:watch": "pnpm run db:migrate:test",
+    "db:migrate:dev": "dotenv -e .env -- drizzle-kit migrate",
+    "db:migrate:prod": "dotenv -e .env.production -- drizzle-kit migrate",
+    "db:test:up": "docker rm -f brevly_test_db 2>/dev/null || true && docker run --rm -d --name brevly_test_db -e POSTGRES_USER=user -e POSTGRES_PASSWORD=pass -e POSTGRES_DB=brevly_test -p 5432:5432 postgres:15",
+    "db:test:down": "docker stop brevly_test_db || true",
+    "test:unit": "dotenv -e .env.test -- vitest run src/use-cases/*.test.ts src/shared/errors/*.test.ts",
+    "test:e2e": "pnpm db:test:up && npx wait-port 5432 && pnpm run db:migrate:test && dotenv -e .env.test -- vitest run src/controllers/*.e2e.spec.ts && pnpm db:test:down",
+    "test:full": "pnpm test:unit && pnpm test:e2e"
   },
   "keywords": [],
   "author": "",
