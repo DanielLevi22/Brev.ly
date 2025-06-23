@@ -9,11 +9,11 @@ interface InputProps extends Omit<ComponentProps<'input'>, 'className'> {
 }
 
 export function Input({ label, error, className, prefix, ...props }: InputProps) {
-  const baseClasses = 'w-full  py-2 border-[2px] outline-none transition-colors text-grayscale-600';
+  const baseClasses = 'w-full py-2 border-[2px] outline-none transition-colors text-grayscale-600';
   
   const stateClasses = error 
     ? 'border-danger bg-red-50' 
-    : 'border-grayscale-300 bg-white focus:border-blue-base focus:bg-white focus:outline-none peer-[&:not(:placeholder-shown)]:focus:border-grayscale-300';
+    : 'border-grayscale-300 bg-white focus:border-blue-base focus:bg-white focus:outline-none peer-[&:not(:placeholder-shown)]:focus:border-grayscale-300 [&:-webkit-autofill]:bg-white [&:-webkit-autofill]:shadow-[0_0_0_30px_white_inset]';
 
   const prefixStateClasses = error 
     ? 'border-danger bg-red-50' 

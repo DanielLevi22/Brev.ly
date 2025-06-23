@@ -6,6 +6,24 @@ body, html {
   font-family: 'Open Sans', sans-serif;
   touch-action: none;
 }
+
+/* Estilos para corrigir autocomplete do navegador */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 30px white inset !important;
+  -webkit-text-fill-color: #4d505c !important;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+/* Para inputs com prefixo */
+input:-webkit-autofill + span,
+span + input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 30px white inset !important;
+  -webkit-text-fill-color: #4d505c !important;
+}
+
 @theme {
   /* escala de cinzas */
   --color-grayscale-white:      #ffffff;
