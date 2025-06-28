@@ -1,4 +1,5 @@
 import { SEO } from './seo';
+import { getShortUrl } from '@/config/environment';
 
 interface RedirectSEOProps {
   shortKey: string;
@@ -6,12 +7,12 @@ interface RedirectSEOProps {
 }
 
 export function RedirectSEO({ shortKey }: RedirectSEOProps) {
-  const currentUrl = `https://brev.ly/${shortKey}`;
+  const currentUrl = getShortUrl(shortKey);
   
   return (
     <SEO
       title={`Redirecionando - ${shortKey}`}
-      description={`Redirecionando para o link original através do encurtador Brev.ly/${shortKey}`}
+      description={`Redirecionando para o link original através do encurtador ${currentUrl}`}
       keywords={`redirecionamento, ${shortKey}, brev.ly, link encurtado`}
       url={currentUrl}
       tags={['redirecionamento', 'link', shortKey]}

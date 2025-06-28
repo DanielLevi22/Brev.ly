@@ -1,4 +1,5 @@
 import { Helmet } from 'react-helmet-async';
+import { config } from '@/config/environment';
 
 interface SEOProps {
   title?: string;
@@ -17,8 +18,8 @@ interface SEOProps {
 const DEFAULT_TITLE = 'Brev.ly - Encurtador de Links Rápido e Seguro';
 const DEFAULT_DESCRIPTION = 'Encurte seus links de forma rápida, segura e gratuita. Crie URLs personalizadas e acompanhe o desempenho dos seus links.';
 const DEFAULT_KEYWORDS = 'encurtador de links, url shortener, links curtos, encurtar url, brev.ly';
-const DEFAULT_IMAGE = 'https://brev.ly/og-image.png';
-const DEFAULT_URL = 'https://brev.ly';
+const DEFAULT_IMAGE = `${config.FRONTEND_URL}/og-image.png`;
+const DEFAULT_URL = config.FRONTEND_URL;
 
 export function SEO({
   title,

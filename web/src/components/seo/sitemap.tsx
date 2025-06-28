@@ -1,4 +1,5 @@
 import { Helmet } from 'react-helmet-async';
+import { config } from '@/config/environment';
 
 export function Sitemap() {
   return (
@@ -10,7 +11,7 @@ export function Sitemap() {
 
 // Função para gerar sitemap estático (pode ser usada no build)
 export function generateSitemap(links: Array<{ shortKey: string; updatedAt: string }> = []) {
-  const baseUrl = 'https://brev.ly';
+  const baseUrl = config.FRONTEND_URL;
   const currentDate = new Date().toISOString();
 
   const sitemapUrls = [

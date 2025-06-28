@@ -1,6 +1,5 @@
 import { CreateLinkRequest, CreateLinkResponse, ListLinksResponse } from '@/types/link';
-
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3333';
+import { config } from '@/config/environment';
 
 class ApiError extends Error {
   constructor(public status: number, message: string) {
@@ -19,7 +18,7 @@ async function handleResponse<T>(response: Response): Promise<T> {
 
 export const api = {
   async createLink(data: CreateLinkRequest): Promise<CreateLinkResponse> {
-    const response = await fetch(`${API_BASE_URL}/link`, {
+    const response = await fetch(`${config.API_URL}/link`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -31,7 +30,7 @@ export const api = {
   },
 
   async listLinks(): Promise<ListLinksResponse> {
-    const response = await fetch(`${API_BASE_URL}/links`, {
+    const response = await fetch(`${config.API_URL}/links`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -42,7 +41,7 @@ export const api = {
   },
 
   async incrementAccess(shortUrl: string): Promise<void> {
-    const response = await fetch(`${API_BASE_URL}/link/${shortUrl}/access`, {
+    const response = await fetch(`${config.API_URL}/link/${shortUrl}/access`, {
       method: 'PATCH',
     });
 
@@ -53,7 +52,7 @@ export const api = {
   },
 
   async getOriginalUrl(shortUrl: string): Promise<{ originalUrl: string }> {
-    const response = await fetch(`${API_BASE_URL}/link/${shortUrl}`, {
+    const response = await fetch(`${config.API_URL}/link/${shortUrl}`, {
       method: 'GET',
     });
 
@@ -61,7 +60,7 @@ export const api = {
   },
 
   async deleteLink(shortUrl: string): Promise<void> {
-    const response = await fetch(`${API_BASE_URL}/link/${shortUrl}`, {
+    const response = await fetch(`${config.API_URL}/link/${shortUrl}`, {
       method: 'DELETE',
     });
 
@@ -72,7 +71,7 @@ export const api = {
   },
 
   async downloadReport(): Promise<Blob> {
-    const response = await fetch(`${API_BASE_URL}/links/report`, {
+    const response = await fetch(`${config.API_URL}/links/report`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

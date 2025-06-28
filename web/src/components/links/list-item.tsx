@@ -3,6 +3,7 @@ import { Link } from "@/types/link";
 import { useDeleteLink } from "@/hooks/use-links";
 import { useState } from "react";
 import { toast } from "sonner";
+import { getShortUrl, getRedirectUrl } from "@/config/environment";
 
 interface ListItemProps {
   link: Link;
@@ -27,11 +28,11 @@ export function ListItem({ link }: ListItemProps) {
 
   async function handleCopyShortUrl() {
     try {
-      const shortUrl = `brev.ly/${link.shortUrl}`;
+      const shortUrl = getShortUrl(link.shortUrl);
       await navigator.clipboard.writeText(shortUrl);
       setIsCopiedShort(true);
       toast.info("Link copiado com sucesso", {
-        description: `${link.shortUrl} foi copiado para a área de transferência.`
+        description: `${shortUrl} foi copiado para a área de transferência.`
       });
       setTimeout(() => setIsCopiedShort(false), 2000);
     } catch (error) {
@@ -41,8 +42,11 @@ export function ListItem({ link }: ListItemProps) {
   };
 
   function handleRedirect()  {
-    window.open(`/${link.shortUrl}`);
+    const redirectUrl = getRedirectUrl(link.shortUrl);
+    window.open(redirectUrl);
   };
+
+  const shortUrlDisplay = getShortUrl(link.shortUrl);
 
   return (
     <div className="border-t border-grayscale-200 py-4">
@@ -52,7 +56,7 @@ export function ListItem({ link }: ListItemProps) {
             className="text-blue-base text-sm md:text-base font-semibold cursor-pointer hover:underline break-all"
             onClick={handleRedirect}
           >
-            brev.ly/{link.shortUrl}
+            {shortUrlDisplay}
           </p>
           <p className="text-xs md:text-sm text-grayscale-600 truncate">{link.originalUrl}</p>
         </div>
