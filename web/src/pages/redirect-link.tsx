@@ -4,6 +4,7 @@ import { useGetOriginalUrl, useIncrementAccess } from '@/hooks/use-links';
 import { MaxWidthWrapper } from '@/components/layout/max-width-wrapper';
 import { RedirectSkeleton } from '@/components/feedback/redirect-skeleton';
 import { ManualRedirect } from '@/components/feedback/manual-redirect';
+import { RedirectSEO } from '@/components/seo/redirect-seo';
 
 export function RedirectLink() {
   const { shortKey } = useParams<{ shortKey: string }>();
@@ -47,18 +48,21 @@ export function RedirectLink() {
   }
 
   return (
-    <div className="min-h-screen bg-grayscale-50">
-      <MaxWidthWrapper className="md:px-8 lg:px-0">
-        <main>
-          <div className="grid grid-cols-1 gap-5 p-3 md:p-0 md:grid-cols-10 lg:gap-8 items-center justify-center min-h-screen">
-            <div className="bg-grayscale-100 col-span-1 md:col-span-6 md:col-start-3 lg:col-span-6 lg:col-start-3 flex flex-col justify-center items-center rounded-lg py-16 text-center gap-6">
-              <img src="/Logo_Icon.svg" alt="icone do logo" width={44} height={36} />
-              <p className="text-2xl font-bold text-grayscale-600">Redirecionando...</p>
-              <ManualRedirect url={originalUrlData.originalUrl} />
+    <>
+      <RedirectSEO shortKey={shortKey || ''} originalUrl={originalUrlData.originalUrl} />
+      <div className="min-h-screen bg-grayscale-50">
+        <MaxWidthWrapper className="md:px-8 lg:px-0">
+          <main>
+            <div className="grid grid-cols-1 gap-5 p-3 md:p-0 md:grid-cols-10 lg:gap-8 items-center justify-center min-h-screen">
+              <div className="bg-grayscale-100 col-span-1 md:col-span-6 md:col-start-3 lg:col-span-6 lg:col-start-3 flex flex-col justify-center items-center rounded-lg py-16 text-center gap-6">
+                <img src="/Logo_Icon.svg" alt="icone do logo" width={44} height={36} />
+                <p className="text-2xl font-bold text-grayscale-600">Redirecionando...</p>
+                <ManualRedirect url={originalUrlData.originalUrl} />
+              </div>
             </div>
-          </div>
-        </main>
-      </MaxWidthWrapper>
-    </div>
+          </main>
+        </MaxWidthWrapper>
+      </div>
+    </>
   );
 }
