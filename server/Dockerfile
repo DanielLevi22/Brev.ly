@@ -9,7 +9,7 @@ FROM base AS deps
 WORKDIR /app
 
 # Copiar arquivos de dependências da raiz
-COPY package.json pnpm-workspace.yaml ./
+COPY package.json pnpm-workspace.yaml pnpm-lock.yaml ./
 COPY server/package.json ./server/
 COPY web/package.json ./web/
 
