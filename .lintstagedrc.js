@@ -6,7 +6,7 @@ module.exports = {
       (file) =>
         !file.includes('node_modules') &&
         !file.includes('.pnpm') &&
-        (file.startsWith('server/') || file.startsWith('web/') || file.startsWith('docs/') || file.startsWith('.github/'))
+        (file.startsWith('server/') || file.startsWith('web/') || file.startsWith('docs/') || file.startsWith('.github/') || file === '.lintstagedrc.js' || file === 'commitlint.config.js')
     );
 
     if (projectFiles.length === 0) return [];
@@ -22,7 +22,7 @@ module.exports = {
       (file) =>
         !file.includes('node_modules') &&
         !file.includes('.pnpm') &&
-        (file.startsWith('server/') || file.startsWith('web/') || file.startsWith('docs/') || file.startsWith('.github/') || file === 'package.json' || file === 'pnpm-workspace.yaml')
+        (file.startsWith('server/') || file.startsWith('web/') || file.startsWith('docs/') || file.startsWith('.github/') || file === 'package.json' || file === 'pnpm-workspace.yaml' || file === '.releaserc.json')
     );
 
     if (projectFiles.length === 0) return [];
