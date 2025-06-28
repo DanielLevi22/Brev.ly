@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useCreateLink } from "@/hooks/use-links";
+import { ApiError } from "@/types/link";
 import { toast } from "sonner";
 
 const createLinkSchema = z.object({
@@ -32,8 +33,9 @@ export function CreateNewLink() {
       await createLinkMutation.mutateAsync(data);
       toast.success("Link criado com sucesso!");
       reset(); 
-    } catch (error: any) {
-      toast.error(error?.message || "Erro ao criar link");
+    } catch (error) {
+      const apiError = error as ApiError;
+      toast.error(apiError?.message || "Erro ao criar link");
     }
   };
 

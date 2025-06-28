@@ -1,9 +1,10 @@
 import { Helmet } from 'react-helmet-async';
 import { config } from '@/config/environment';
+import { StructuredDataConfig } from '@/types/link';
 
 interface StructuredDataProps {
-  type: 'website' | 'organization' | 'webpage';
-  data: Record<string, any>;
+  type: StructuredDataConfig['type'];
+  data: Record<string, unknown>;
 }
 
 export function StructuredData({ type, data }: StructuredDataProps) {

@@ -1,19 +1,6 @@
 import { Helmet } from 'react-helmet-async';
 import { config } from '@/config/environment';
-
-interface SEOProps {
-  title?: string;
-  description?: string;
-  keywords?: string;
-  image?: string;
-  url?: string;
-  type?: 'website' | 'article';
-  author?: string;
-  publishedTime?: string;
-  modifiedTime?: string;
-  section?: string;
-  tags?: string[];
-}
+import { SEOConfig } from '@/types/link';
 
 const DEFAULT_TITLE = 'Brev.ly - Encurtador de Links Rápido e Seguro';
 const DEFAULT_DESCRIPTION = 'Encurte seus links de forma rápida, segura e gratuita. Crie URLs personalizadas e acompanhe o desempenho dos seus links.';
@@ -33,7 +20,7 @@ export function SEO({
   modifiedTime,
   section,
   tags = []
-}: SEOProps) {
+}: SEOConfig) {
   const fullTitle = title ? `${title} | Brev.ly` : DEFAULT_TITLE;
   const fullKeywords = tags.length > 0 ? `${keywords}, ${tags.join(', ')}` : keywords;
 

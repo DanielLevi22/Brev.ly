@@ -4,6 +4,7 @@ interface ButtonProps extends ComponentProps<'button'> {
   variant?: 'primary' | 'secondary' | 'icon'
   icon?: ReactNode
   children?: ReactNode
+  className?: string
 }
 
 /**

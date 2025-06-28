@@ -1,15 +1,11 @@
 import { ButtonIcon } from "@/components/ui/button-icon";
-import { Link } from "@/types/link";
+import { LinkListItemProps } from "@/types/link";
 import { useDeleteLink } from "@/hooks/use-links";
 import { useState } from "react";
 import { toast } from "sonner";
 import { getShortUrl, getRedirectUrl } from "@/config/environment";
 
-interface ListItemProps {
-  link: Link;
-}
-
-export function ListItem({ link }: ListItemProps) {
+export function ListItem({ link }: LinkListItemProps) {
   const deleteLinkMutation = useDeleteLink();
   const [isCopiedShort, setIsCopiedShort] = useState(false);
 
