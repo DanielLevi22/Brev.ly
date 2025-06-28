@@ -1,0 +1,108 @@
+name: Code Quality
+
+on:
+  push:
+    branches: [master, main, develop]
+  pull_request:
+    branches: [master, main, develop]
+
+jobs:
+  code-quality:
+    name: Code Quality Analysis
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: '8'
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: |
+          pnpm install
+          cd server && pnpm install
+          cd ../web && pnpm install
+
+      - name: Run Biome (Server)
+        run: |
+          cd server
+          pnpm run format:check
+          pnpm run lint
+
+      - name: Run TypeScript check (Server)
+        run: |
+          cd server
+          npx tsc --noEmit
+
+      - name: Run TypeScript check (Web)
+        run: |
+          cd web
+          npx tsc --noEmit
+
+      - name: Check for console.log statements
+        run: |
+          echo "Checking for console.log statements..."
+          if grep -r "console.log" server/src/ --exclude-dir=node_modules; then
+            echo "Found console.log statements in server code"
+            exit 1
+          fi
+          if grep -r "console.log" web/src/ --exclude-dir=node_modules; then
+            echo "Found console.log statements in web code"
+            exit 1
+          fi
+
+      - name: Check for TODO comments
+        run: |
+          echo "Checking for TODO comments..."
+          if grep -r "TODO" server/src/ --exclude-dir=node_modules; then
+            echo "Found TODO comments in server code"
+            exit 1
+          fi
+          if grep -r "TODO" web/src/ --exclude-dir=node_modules; then
+            echo "Found TODO comments in web code"
+            exit 1
+          fi
+
+      - name: Check for FIXME comments
+        run: |
+          echo "Checking for FIXME comments..."
+          if grep -r "FIXME" server/src/ --exclude-dir=node_modules; then
+            echo "Found FIXME comments in server code"
+            exit 1
+          fi
+          if grep -r "FIXME" web/src/ --exclude-dir=node_modules; then
+            echo "Found FIXME comments in web code"
+            exit 1
+          fi
+
+      - name: Check for unused imports
+        run: |
+          echo "Checking for unused imports..."
+          cd server
+          npx tsc --noEmit --noUnusedLocals --noUnusedParameters
+          cd ../web
+          npx tsc --noEmit --noUnusedLocals --noUnusedParameters
+
+      - name: Generate coverage report
+        run: |
+          cd server
+          pnpm run test:unit --coverage
+          cd ../web
+          pnpm run test --coverage
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          file: ./coverage/lcov.info
+          flags: unittests
+          name: codecov-umbrella
+          fail_ci_if_error: true 

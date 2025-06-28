@@ -1,21 +1,27 @@
-name: CI
+name: CI/CD Pipeline
 
 on:
   push:
-    branches: [master, main]
+    branches: [master, main, develop]
   pull_request:
-    branches: [master, main]
+    branches: [master, main, develop]
+
+env:
+  NODE_VERSION: '20'
+  PNPM_VERSION: '8'
 
 jobs:
-  test:
+  # Job para testar o servidor
+  test-server:
+    name: Test Server
     runs-on: ubuntu-latest
-
+    
     services:
       postgres:
         image: postgres:15
         env:
-          POSTGRES_USER: user
-          POSTGRES_PASSWORD: pass
+          POSTGRES_USER: test_user
+          POSTGRES_PASSWORD: test_pass
           POSTGRES_DB: brevly_test
         ports:
           - 5432:5432
@@ -25,18 +31,186 @@ jobs:
           --health-timeout 5s
           --health-retries 5
 
-    env:
-      DATABASE_URL: postgres://user:pass@localhost:5432/brevly_test
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: |
+          cd server
+          pnpm install
+
+      - name: Run database migrations
+        run: |
+          cd server
+          pnpm run migrate:test
+        env:
+          DATABASE_URL: postgres://test_user:test_pass@localhost:5432/brevly_test
+
+      - name: Run unit tests
+        run: |
+          cd server
+          pnpm run test:unit
+        env:
+          DATABASE_URL: postgres://test_user:test_pass@localhost:5432/brevly_test
+
+      - name: Run E2E tests
+        run: |
+          cd server
+          pnpm run test:e2e
+        env:
+          DATABASE_URL: postgres://test_user:test_pass@localhost:5432/brevly_test
+
+      - name: Run full test suite
+        run: |
+          cd server
+          pnpm run test:full
+        env:
+          DATABASE_URL: postgres://test_user:test_pass@localhost:5432/brevly_test
+
+  # Job para testar o frontend
+  test-frontend:
+    name: Test Frontend
+    runs-on: ubuntu-latest
+    needs: test-server
 
     steps:
-      - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v2
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
         with:
-          version: 8
-      - uses: actions/setup-node@v4
+          version: ${{ env.PNPM_VERSION }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: ${{ env.NODE_VERSION }}
           cache: 'pnpm'
-      - run: pnpm install
-      - run: pnpm run db:migrate:test
-      - run: pnpm test 
+
+      - name: Install dependencies
+        run: |
+          cd web
+          pnpm install
+
+      - name: Type check
+        run: |
+          cd web
+          pnpm run type-check
+
+      - name: Lint code
+        run: |
+          cd web
+          pnpm run lint
+
+      - name: Build application
+        run: |
+          cd web
+          pnpm run build
+
+  # Job para análise de segurança
+  security:
+    name: Security Analysis
+    runs-on: ubuntu-latest
+    needs: [test-server, test-frontend]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: |
+          pnpm install
+          cd server && pnpm install
+          cd ../web && pnpm install
+
+      - name: Run security audit
+        run: |
+          pnpm audit --audit-level moderate
+          cd server && pnpm audit --audit-level moderate
+          cd ../web && pnpm audit --audit-level moderate
+
+  # Job para build e deploy (apenas em push para master/main)
+  deploy:
+    name: Build and Deploy
+    runs-on: ubuntu-latest
+    needs: [test-server, test-frontend, security]
+    if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: |
+          pnpm install
+          cd server && pnpm install
+          cd ../web && pnpm install
+
+      - name: Build server
+        run: |
+          cd server
+          pnpm run build
+
+      - name: Build frontend
+        run: |
+          cd web
+          pnpm run build
+
+      - name: Create deployment artifacts
+        run: |
+          mkdir -p dist
+          cp -r server/dist dist/server
+          cp -r web/dist dist/web
+          cp server/package.json dist/server/
+          cp web/package.json dist/web/
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-artifacts
+          path: dist/
+          retention-days: 30
+
+      - name: Deploy to production
+        run: |
+          echo "Deploying to production..."
+          # Aqui você pode adicionar os comandos de deploy
+          # Por exemplo: deploy para Vercel, Railway, etc.
+        env:
+          # Adicione suas variáveis de ambiente de produção aqui
+          NODE_ENV: production 

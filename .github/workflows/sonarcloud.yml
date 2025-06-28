@@ -1,0 +1,53 @@
+name: SonarCloud Analysis
+
+on:
+  push:
+    branches: [master, main, develop]
+  pull_request:
+    branches: [master, main, develop]
+
+jobs:
+  sonarcloud:
+    name: SonarCloud Analysis
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: '8'
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: |
+          pnpm install
+          cd server && pnpm install
+          cd ../web && pnpm install
+
+      - name: Run tests with coverage (Server)
+        run: |
+          cd server
+          pnpm run test:unit --coverage
+        env:
+          DATABASE_URL: postgres://test_user:test_pass@localhost:5432/brevly_test
+
+      - name: Run tests with coverage (Web)
+        run: |
+          cd web
+          pnpm run test --coverage
+
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }} 
