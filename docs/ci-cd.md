@@ -2,7 +2,7 @@
 
 ## Visão Geral
 
-Este documento descreve o pipeline de CI/CD simplificado do projeto Brev.ly, focado em testes, versionamento automático e deploy de Docker.
+Este documento descreve o pipeline de CI/CD simplificado do projeto Brev.ly, focado em testes, versionamento automático interno e deploy de Docker.
 
 ## Workflows
 
@@ -20,9 +20,8 @@ Este documento descreve o pipeline de CI/CD simplificado do projeto Brev.ly, foc
 1. Setup do ambiente (Node.js, pnpm)
 2. Instalação de dependências
 3. Migração do banco de teste
-4. Execução de testes unitários
-5. Execução de testes E2E
-6. Execução da suite completa
+4. Execução de testes do servidor
+5. Execução de testes do frontend (opcional)
 
 ### 2. Build and Push Docker Image (`docker-build.yml`)
 
@@ -53,13 +52,13 @@ Este documento descreve o pipeline de CI/CD simplificado do projeto Brev.ly, foc
 - Versionamento automático baseado em conventional commits
 - Geração de changelog
 - Criação de tags
-- Publicação no npm (opcional)
+- Criação de releases no GitHub
 
 ## Versionamento
 
 ### Conventional Commits
 
-O projeto usa [Conventional Commits](https://www.conventionalcommits.org/) para versionamento automático:
+O projeto usa [Conventional Commits](https://www.conventionalcommits.org/) para versionamento automático interno:
 
 - `feat:` - Nova funcionalidade (minor version)
 - `fix:` - Correção de bug (patch version)
@@ -121,7 +120,6 @@ Configure os seguintes secrets no GitHub:
 - `DOCKER_USERNAME` - Usuário do Docker Hub
 - `DOCKER_PASSWORD` - Senha/token do Docker Hub
 - `GITHUB_TOKEN` - Token do GitHub (automático)
-- `NPM_TOKEN` - Token do npm (opcional)
 
 ### Variáveis de Ambiente
 
@@ -200,29 +198,24 @@ docker logs brevly-server
 # Ver status do container
 docker ps -a
 
-# Ver imagens disponíveis
-docker images brevly/server
+# Ver logs do workflow
+# Acesse: Actions > [Workflow] > [Job] > [Step]
 ```
 
-## Próximos Passos
+## Notas Importantes
 
-### Melhorias Planejadas
+### Versionamento Interno
 
-1. **Cache de Dependências**
-   - Implementar cache do pnpm
-   - Cache do Docker layers
+- O projeto usa versionamento semântico apenas para controle interno
+- Não há publicação no npm
+- Releases são criados apenas no GitHub
+- Tags são usadas para identificar versões no Docker Hub
 
-2. **Testes de Performance**
-   - Adicionar testes de performance
-   - Benchmarks automáticos
+### Workflow de Testes
 
-3. **Deploy Automático**
-   - Deploy automático em staging
-   - Deploy automático em produção
-
-4. **Notificações**
-   - Integração com Slack/Discord
-   - Notificações de falha
+- Testes do frontend são opcionais por enquanto
+- Foco principal nos testes do servidor
+- Banco de dados PostgreSQL em container para testes isolados
 
 ## Contatos
 
