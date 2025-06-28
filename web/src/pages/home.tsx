@@ -1,7 +1,8 @@
-import { MyLinks } from "@/components/list-links";
-import { CreateNewLink } from "@/components/new-link";
-import { Header } from "@/components/header";
-import { MaxWidthWrapper } from "@/components/max-width-wrapper";
+import { CreateNewLink } from "@/components/forms/new-link";
+import { Header } from "@/components/layout/header";
+import { MaxWidthWrapper } from "@/components/layout/max-width-wrapper";
+import { MyLinks } from "@/components/links/list-links";
+
 
 export function HomePage() {
   return (

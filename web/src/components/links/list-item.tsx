@@ -1,4 +1,4 @@
-import { ButtonIcon } from "./button-icon";
+import { ButtonIcon } from "@/components/ui/button-icon";
 import { Link } from "@/types/link";
 import { useDeleteLink } from "@/hooks/use-links";
 import { useState } from "react";

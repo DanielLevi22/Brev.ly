@@ -78,4 +78,24 @@ export function useDeleteLink() {
       console.error('Erro ao deletar link:', error);
     },
   });
+}
+
+export function useDownloadReport() {
+  return useMutation({
+    mutationFn: api.downloadReport,
+    onSuccess: (blob) => {
+      // Criar um link temporário para download
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `relatorio-links-${new Date().toISOString().split('T')[0]}.csv`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+    },
+    onError: (error) => {
+      console.error('Erro ao baixar relatório:', error);
+    },
+  });
 } 

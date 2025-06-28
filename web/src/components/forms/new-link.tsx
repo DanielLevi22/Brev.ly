@@ -1,5 +1,5 @@
-import { Button } from "./button";
-import { Input } from "./input";
+import { Button } from  "@/components/ui/button"
+import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -31,7 +31,7 @@ export function CreateNewLink() {
     try {
       await createLinkMutation.mutateAsync(data);
       toast.success("Link criado com sucesso!");
-      reset(); // Limpa o formulário após sucesso
+      reset(); 
     } catch (error: any) {
       toast.error(error?.message || "Erro ao criar link");
     }

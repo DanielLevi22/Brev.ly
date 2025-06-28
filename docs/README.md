@@ -1,3 +1,55 @@
+# Documentação do Projeto Brev.ly
+
+Este diretório contém a documentação completa do projeto Brev.ly, incluindo arquitetura, implementações e guias de uso.
+
+## 📚 Documentação Disponível
+
+### [Endpoint de Relatório CSV](./csv-report-endpoint.md)
+Documentação completa sobre o endpoint `/links/report` que permite gerar e baixar relatórios CSV dos links cadastrados.
+
+**Tópicos cobertos:**
+- Arquitetura Clean Architecture
+- Implementação backend e frontend
+- Resolução de problemas de CORS
+- Testes E2E e unitários
+- Estrutura do arquivo CSV gerado
+
+### [Segurança e Logging](./security-and-logging.md)
+Documentação sobre as melhorias de segurança e sistema de logging implementadas.
+
+**Tópicos cobertos:**
+- Sanitização dupla de inputs (XSS + HTML)
+- Validação rigorosa com Zod
+- Logging estruturado com Pino
+- Headers de segurança
+- Rate limiting e CORS
+- Monitoramento e observabilidade
+
+### [Melhores Práticas de Ambiente](./environment-best-practices.md)
+Documentação sobre a configuração de ambientes e melhores práticas implementadas.
+
+**Tópicos cobertos:**
+- Separação de ambientes (dev, test, prod)
+- Configuração de bancos de dados isolados
+- Scripts de migração por ambiente
+- Limpeza automática do banco de teste
+- Configuração Docker por ambiente
+- Segurança e monitoramento por ambiente
+
+### [Classes de Erro Personalizadas](./README.md#classes-de-erro-personalizadas)
+Documentação sobre as classes de erro customizadas do domínio.
+
+### [Hooks do Frontend](./hooks.md)
+Documentação sobre os hooks React Query utilizados no frontend.
+
+### [Rotas da API](./Routes.md)
+Documentação sobre todos os endpoints da API.
+
+### [Documentação Geral do Projeto](./url_shortener_project_documentation.markdown)
+Documentação completa do projeto incluindo setup, arquitetura e funcionalidades.
+
+---
+
 # Classes de Erro Personalizadas
 
 Este arquivo contém as classes de erro personalizadas para o domínio de links.

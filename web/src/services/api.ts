@@ -70,4 +70,20 @@ export const api = {
       throw new ApiError(response.status, errorData.error || `HTTP error! status: ${response.status}`);
     }
   },
+
+  async downloadReport(): Promise<Blob> {
+    const response = await fetch(`${API_BASE_URL}/links/report`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new ApiError(response.status, errorData.error || `HTTP error! status: ${response.status}`);
+    }
+
+    return response.blob();
+  },
 }; 
