@@ -4,56 +4,41 @@ FROM node:20-alpine AS base
 # Instalar pnpm globalmente
 RUN npm install -g pnpm
 
-# Stage de dependências
-FROM base AS deps
+# Stage de dependências e build
+FROM base AS builder
 WORKDIR /app
 
-# Copiar arquivos de dependências da raiz
+# Copiar arquivos de dependências da raiz e do server
 COPY package.json pnpm-workspace.yaml pnpm-lock.yaml ./
 COPY server/package.json ./server/
 COPY web/package.json ./web/
 
-# Instalar dependências
+# Instalar dependências do monorepo
 RUN pnpm install --frozen-lockfile
 
-# Stage de build
-FROM base AS builder
-WORKDIR /app
-
-# Copiar dependências
-COPY --from=deps /app/node_modules ./node_modules
-COPY --from=deps /app/server/node_modules ./server/node_modules
+# Copiar todo o código e buildar o server
 COPY . .
-
-# Build da aplicação
 RUN cd server && pnpm build
 
-# Criar node_modules apenas com dependências de produção
-RUN cd server && pnpm install --prod --frozen-lockfile
+# Prunar dependências para produção no server
+RUN cd server && pnpm prune --prod
 
-# Stage de produção
+# Stage de produção enxuto
 FROM node:20-alpine AS production
-
-# Criar usuário não-root
-RUN addgroup -g 1001 -S nodejs
-RUN adduser -S nodejs -u 1001
-
 WORKDIR /app
 
-# Copiar apenas arquivos necessários para produção
-COPY --from=builder --chown=nodejs:nodejs /app/server/dist ./dist
-COPY --from=builder --chown=nodejs:nodejs /app/server/node_modules ./node_modules
-COPY --from=builder --chown=nodejs:nodejs /app/server/package.json ./package.json
+# Copiar apenas arquivos essenciais do server
+COPY --from=builder /app/server/dist ./dist
+COPY --from=builder /app/server/node_modules ./node_modules
+COPY --from=builder /app/server/package.json ./package.json
 
-# Mudar para usuário não-root
+# Criar usuário não-root
+RUN addgroup -g 1001 -S nodejs && adduser -S nodejs -u 1001
 USER nodejs
 
-# Expor porta
 EXPOSE 3000
 
-# Health check
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
   CMD node -e "require('http').get('http://localhost:3000/health', (res) => { process.exit(res.statusCode === 200 ? 0 : 1) })"
 
-# Comando para iniciar a aplicação
 CMD ["node", "dist/server.mjs"]
