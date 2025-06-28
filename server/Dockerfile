@@ -1,35 +1,56 @@
-FROM node:22.13.1 AS base
+# Multi-stage build para otimizar o tamanho da imagem
+FROM node:20-alpine AS base
 
+# Instalar pnpm globalmente
 RUN npm install -g pnpm
 
-FROM base AS dependencies
+# Stage de dependências
+FROM base AS deps
+WORKDIR /app
 
-WORKDIR /usr/src/app
-
+# Copiar arquivos de dependências
 COPY package.json pnpm-lock.yaml ./
 
-RUN pnpm install
+# Instalar dependências
+RUN pnpm install --frozen-lockfile
 
-FROM dependencies AS build
+# Stage de build
+FROM base AS builder
+WORKDIR /app
 
-WORKDIR /usr/src/app
-
+# Copiar dependências
+COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-COPY --from=dependencies /usr/src/app/node_modules ./node_modules
-
+# Build da aplicação
 RUN pnpm build
+
+# Remover dependências de desenvolvimento
 RUN pnpm prune --prod
 
-FROM cgr.dev/chainguard/node AS production
-USER 1000
-WORKDIR /usr/src/app
+# Stage de produção
+FROM node:20-alpine AS production
 
-COPY --from=build /usr/src/app/dist ./dist
-COPY --from=build /usr/src/app/node_modules ./node_modules
-COPY --from=build /usr/src/app/package.json ./package.json
+# Criar usuário não-root
+RUN addgroup -g 1001 -S nodejs
+RUN adduser -S nodejs -u 1001
 
+WORKDIR /app
 
-EXPOSE 3333
+# Copiar arquivos necessários
+COPY --from=builder --chown=nodejs:nodejs /app/dist ./dist
+COPY --from=builder --chown=nodejs:nodejs /app/node_modules ./node_modules
+COPY --from=builder --chown=nodejs:nodejs /app/package.json ./package.json
 
-CMD ["dist//server.mjs"]
+# Mudar para usuário não-root
+USER nodejs
+
+# Expor porta
+EXPOSE 3000
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+  CMD node -e "require('http').get('http://localhost:3000/health', (res) => { process.exit(res.statusCode === 200 ? 0 : 1) })"
+
+# Comando para iniciar a aplicação
+CMD ["node", "dist/server.mjs"]

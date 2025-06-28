@@ -1,7 +1,8 @@
 {
-  "name": "server",
-  "version": "1.0.0",
-  "main": "index.js",
+  "name": "@brevly/server",
+  "version": "0.0.0-development",
+  "main": "dist/server.mjs",
+  "type": "module",
   "scripts": {
     "dev": "docker-compose up -d && tsx watch --env-file .env src/server.ts",
     "build": "tsup-node",
@@ -16,12 +17,33 @@
     "test:full": "pnpm test:unit && pnpm test:e2e",
     "docker:up": "docker-compose up -d",
     "docker:down": "docker-compose down",
-    "docker:restart": "docker-compose down && docker-compose up -d"
+    "docker:restart": "docker-compose down && docker-compose up -d",
+    "release": "semantic-release"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": "",
+  "keywords": [
+    "url-shortener",
+    "api",
+    "fastify",
+    "typescript"
+  ],
+  "author": "Daniel Levi",
+  "license": "MIT",
+  "description": "URL shortener service with modern architecture",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/DanielLevi22/Brev.ly.git"
+  },
+  "bugs": {
+    "url": "https://github.com/DanielLevi22/Brev.ly/issues"
+  },
+  "homepage": "https://github.com/DanielLevi22/Brev.ly#readme",
+  "engines": {
+    "node": ">=18.0.0",
+    "pnpm": ">=8.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.832.0",
     "@aws-sdk/lib-storage": "^3.832.0",
@@ -45,9 +67,14 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
+    "@semantic-release/changelog": "^6.0.3",
+    "@semantic-release/git": "^10.0.1",
+    "@semantic-release/github": "^8.0.7",
+    "@semantic-release/npm": "^10.0.4",
     "@types/sanitize-html": "^2.16.0",
     "@types/supertest": "^6.0.3",
     "drizzle-kit": "^0.30.5",
+    "semantic-release": "^21.1.1",
     "supertest": "^7.1.1",
     "tsup": "^8.4.0",
     "typescript": "^5.8.3",
