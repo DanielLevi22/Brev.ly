@@ -1,3 +1,10 @@
+## [1.0.1](https://github.com/DanielLevi22/Brev.ly/compare/v1.0.0...v1.0.1) (2025-06-28)
+
+
+### Bug Fixes
+
+* correct Dockerfile for workspace dependencies ([778fa8e](https://github.com/DanielLevi22/Brev.ly/commit/778fa8e53627ecb7595b0197d6199595bd59edf3))
+
 # 1.0.0 (2025-06-28)
 
 
