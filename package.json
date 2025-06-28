@@ -11,10 +11,15 @@
     "dev": "pnpm --parallel dev",
     "build": "pnpm --recursive build",
     "test": "pnpm --recursive test",
+    "test:server": "cd server && pnpm test:full",
+    "test:web": "cd web && pnpm test",
     "lint": "pnpm --recursive lint",
     "format": "pnpm --recursive format",
     "commit": "git-cz",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "db:migrate:test": "cd server && pnpm migrate:test",
+    "db:migrate:dev": "cd server && pnpm migrate:dev",
+    "db:migrate:prod": "cd server && pnpm migrate:prod"
   },
   "keywords": [
     "url-shortener",

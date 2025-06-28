@@ -42,34 +42,17 @@ jobs:
           cache: 'pnpm'
 
       - name: Install dependencies
-        run: |
-          cd server
-          pnpm install
+        run: pnpm install
 
       - name: Run database migrations
-        run: |
-          cd server
-          pnpm run migrate:test
+        run: pnpm db:migrate:test
         env:
           DATABASE_URL: postgres://test_user:test_pass@localhost:5432/brevly_test
 
-      - name: Run unit tests
-        run: |
-          cd server
-          pnpm run test:unit
+      - name: Run server tests
+        run: pnpm test:server
         env:
           DATABASE_URL: postgres://test_user:test_pass@localhost:5432/brevly_test
 
-      - name: Run E2E tests
-        run: |
-          cd server
-          pnpm run test:e2e
-        env:
-          DATABASE_URL: postgres://test_user:test_pass@localhost:5432/brevly_test
-
-      - name: Run full test suite
-        run: |
-          cd server
-          pnpm run test:full
-        env:
-          DATABASE_URL: postgres://test_user:test_pass@localhost:5432/brevly_test 
+      - name: Run web tests
+        run: pnpm test:web 
