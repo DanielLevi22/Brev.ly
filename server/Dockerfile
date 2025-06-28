@@ -28,8 +28,8 @@ COPY . .
 # Build da aplicação
 RUN cd server && pnpm build
 
-# Remover dependências de desenvolvimento
-RUN cd server && pnpm prune --prod
+# Criar node_modules apenas com dependências de produção
+RUN cd server && pnpm install --prod --frozen-lockfile
 
 # Stage de produção
 FROM node:20-alpine AS production
@@ -40,7 +40,7 @@ RUN adduser -S nodejs -u 1001
 
 WORKDIR /app
 
-# Copiar arquivos necessários
+# Copiar apenas arquivos necessários para produção
 COPY --from=builder --chown=nodejs:nodejs /app/server/dist ./dist
 COPY --from=builder --chown=nodejs:nodejs /app/server/node_modules ./node_modules
 COPY --from=builder --chown=nodejs:nodejs /app/server/package.json ./package.json
