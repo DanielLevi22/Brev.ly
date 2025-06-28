@@ -2,57 +2,56 @@
 
 ## Visão Geral
 
-Este documento descreve o pipeline de CI/CD simplificado do projeto Brev.ly, focado em testes, versionamento automático interno e deploy de Docker.
+Este documento descreve o pipeline de CI/CD unificado do projeto Brev.ly, que garante que releases só aconteçam após todos os processos serem bem-sucedidos.
 
-## Workflows
+## Workflow Principal
 
-### 1. Test Server (`test.yml`)
+### CI Pipeline (`ci.yml`)
 
 **Trigger**: Push e Pull Requests para `master`, `main`, `develop`
 
-**Funcionalidades**:
-- Executa testes unitários
-- Executa testes E2E
-- Executa suite completa de testes
-- Usa PostgreSQL em container para testes
+**Estrutura**:
+1. **Test** - Executa testes
+2. **Build** - Build e push da imagem Docker (apenas em master/main)
+3. **Release** - Criação de release (apenas em master/main)
 
-**Steps**:
-1. Setup do ambiente (Node.js, pnpm)
-2. Instalação de dependências
-3. Migração do banco de teste
-4. Execução de testes do servidor
-5. Execução de testes do frontend (opcional)
+### Jobs
 
-### 2. Build and Push Docker Image (`docker-build.yml`)
+#### 1. Test Job
+- ✅ Executa migrações do banco de teste
+- ✅ Roda testes do servidor
+- ✅ Roda testes do frontend (opcional)
+- ✅ Usa PostgreSQL em container para testes isolados
 
-**Trigger**: 
-- Push para `master` ou `main`
-- Tags com padrão `v*` (ex: v1.0.0)
-- Manual via workflow_dispatch
+#### 2. Build Job
+- ✅ Depende do sucesso dos testes (`needs: test`)
+- ✅ Executa apenas em `master`, `main` ou tags
+- ✅ Build da imagem Docker
+- ✅ Push para Docker Hub
+- ✅ Versionamento automático
 
-**Funcionalidades**:
-- Build da imagem Docker
-- Push para Docker Hub
-- Versionamento automático
-- Criação de releases no GitHub
+#### 3. Release Job
+- ✅ Depende do sucesso dos testes E build (`needs: [test, build]`)
+- ✅ Executa apenas em `master` ou `main`
+- ✅ Ignora commits de CI e chore
+- ✅ Versionamento automático baseado em conventional commits
+- ✅ Criação de releases no GitHub
 
-**Steps**:
-1. Setup do Docker Buildx
-2. Login no Docker Hub
-3. Extração de metadados
-4. Build e push da imagem
-5. Geração de changelog
-6. Criação de release (apenas para tags)
+## Fluxo de Execução
 
-### 3. Version and Release (`version.yml`)
-
-**Trigger**: Push para `master` ou `main`
-
-**Funcionalidades**:
-- Versionamento automático baseado em conventional commits
-- Geração de changelog
-- Criação de tags
-- Criação de releases no GitHub
+```mermaid
+graph TD
+    A[Push/PR] --> B[Test Job]
+    B --> C{Tests Pass?}
+    C -->|Yes| D[Build Job]
+    C -->|No| E[Pipeline Failed]
+    D --> F{Build Pass?}
+    F -->|Yes| G[Release Job]
+    F -->|No| E
+    G --> H{Release Created?}
+    H -->|Yes| I[Success]
+    H -->|No| E
+```
 
 ## Versionamento
 
@@ -137,7 +136,7 @@ PNPM_VERSION: '8'
 
 Para fazer build manual de uma versão específica:
 
-1. Vá para Actions > Build and Push Docker Image
+1. Vá para Actions > CI Pipeline
 2. Clique em "Run workflow"
 3. Digite a versão desejada
 4. Clique em "Run workflow"
@@ -159,7 +158,7 @@ git push origin v1.0.0
 ### Status dos Workflows
 
 - Acesse: https://github.com/DanielLevi22/Brev.ly/actions
-- Verifique o status dos últimos workflows
+- Verifique o status do pipeline unificado
 - Analise logs em caso de falha
 
 ### Notificações
@@ -199,23 +198,30 @@ docker logs brevly-server
 docker ps -a
 
 # Ver logs do workflow
-# Acesse: Actions > [Workflow] > [Job] > [Step]
+# Acesse: Actions > CI Pipeline > [Job] > [Step]
 ```
 
 ## Notas Importantes
 
-### Versionamento Interno
+### Garantias do Pipeline
 
-- O projeto usa versionamento semântico apenas para controle interno
-- Não há publicação no npm
-- Releases são criados apenas no GitHub
-- Tags são usadas para identificar versões no Docker Hub
+- ✅ **Testes obrigatórios**: Release só acontece se todos os testes passarem
+- ✅ **Build obrigatório**: Release só acontece se o build for bem-sucedido
+- ✅ **Versionamento interno**: Controle de versões sem publicação no npm
+- ✅ **Releases no GitHub**: Changelog e releases organizados
+- ✅ **Tags no Docker**: Imagens versionadas no Docker Hub
 
 ### Workflow de Testes
 
 - Testes do frontend são opcionais por enquanto
 - Foco principal nos testes do servidor
 - Banco de dados PostgreSQL em container para testes isolados
+
+### Segurança
+
+- Usuário não-root no container Docker
+- Secrets seguros no GitHub
+- Health checks automáticos
 
 ## Contatos
 
