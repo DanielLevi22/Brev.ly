@@ -1,3 +1,23 @@
+# [1.1.0](https://github.com/DanielLevi22/Brev.ly/compare/v1.0.1...v1.1.0) (2025-06-28)
+
+
+### Bug Fixes
+
+* add pnpm-lock.yaml to Dockerfile copy ([9fed087](https://github.com/DanielLevi22/Brev.ly/commit/9fed08744bb7b2351c387758c77561db7da6bfee))
+* update Docker repository name to daniellevi23/brevly ([aa0a75b](https://github.com/DanielLevi22/Brev.ly/commit/aa0a75bb7580d755501fa0d76dc0010d2a6643d5))
+
+
+### Features
+
+* implement unified CI pipeline with release dependencies ([32075a9](https://github.com/DanielLevi22/Brev.ly/commit/32075a9326ab5333955628034b2a779889505f3c))
+* optimize CI pipeline for parallel execution and fix lockfile ([be65ad1](https://github.com/DanielLevi22/Brev.ly/commit/be65ad10b3fb9cc2acc39412baa27f425ce4cd5d))
+
+
+### Performance Improvements
+
+* optimize Docker build with production-only dependencies ([349093b](https://github.com/DanielLevi22/Brev.ly/commit/349093b2776d86cd12246b158942bac9bd9811e6))
+* optimize Docker image size and build time ([17cceac](https://github.com/DanielLevi22/Brev.ly/commit/17cceac18fe351fb6e57a41c92af21ac348b7df6))
+
 ## [1.0.1](https://github.com/DanielLevi22/Brev.ly/compare/v1.0.0...v1.0.1) (2025-06-28)
 
 
