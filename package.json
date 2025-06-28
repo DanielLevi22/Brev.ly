@@ -1,0 +1,45 @@
+{
+  "name": "brevly",
+  "version": "1.0.0",
+  "description": "URL shortener service with modern architecture",
+  "private": true,
+  "workspaces": [
+    "server",
+    "web"
+  ],
+  "scripts": {
+    "dev": "pnpm --parallel dev",
+    "build": "pnpm --recursive build",
+    "test": "pnpm --recursive test",
+    "lint": "pnpm --recursive lint",
+    "format": "pnpm --recursive format",
+    "commit": "git-cz",
+    "prepare": "husky install"
+  },
+  "keywords": [
+    "url-shortener",
+    "fullstack",
+    "typescript",
+    "fastify",
+    "react"
+  ],
+  "author": "Daniel Levi",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/DanielLevi22/Brev.ly.git"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^18.4.3",
+    "@commitlint/config-conventional": "^18.4.3",
+    "commitizen": "^4.3.0",
+    "cz-conventional-changelog": "^3.3.0",
+    "husky": "^8.0.3",
+    "lint-staged": "^15.2.0"
+  },
+  "config": {
+    "commitizen": {
+      "path": "cz-conventional-changelog"
+    }
+  }
+}
