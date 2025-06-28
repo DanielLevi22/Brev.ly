@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useGetOriginalUrl, useIncrementAccess } from '@/hooks/use-links';
 import { MaxWidthWrapper } from '@/components/layout/max-width-wrapper';
-import { RedirectLoader } from '@/components/feedback/redirect-loader';
+import { RedirectSkeleton } from '@/components/feedback/redirect-skeleton';
 import { ManualRedirect } from '@/components/feedback/manual-redirect';
 
 export function RedirectLink() {
@@ -38,17 +38,7 @@ export function RedirectLink() {
   }, [shortKey, originalUrlData, incrementAccessMutation, navigate]); 
 
   if (isLoading) {
-    return (
-      <div className="min-h-screen bg-grayscale-50">
-        <MaxWidthWrapper className="md:px-8 lg:px-0">
-          <main>
-            <div className="grid grid-cols-1 gap-5 p-3 md:p-0 md:grid-cols-10 lg:gap-8 items-center justify-center min-h-screen">
-              <RedirectLoader />
-            </div>
-          </main>
-        </MaxWidthWrapper>
-      </div>
-    );
+    return <RedirectSkeleton />;
   }
 
   if (error || !originalUrlData) {

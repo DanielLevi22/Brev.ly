@@ -1,5 +1,5 @@
 import { LinksHeader } from "./links-header";
-import { CircleNotch } from "@phosphor-icons/react";
+import { LinksListSkeleton } from "../feedback/skeleton";
 
 interface LinksLoadingProps {
   onDownload: () => void;
@@ -19,10 +19,7 @@ export function LinksLoading({ onDownload, loading }: LinksLoadingProps) {
         ></div>
       </div>
       <LinksHeader onDownload={onDownload} disabled={loading} loading={loading} />
-      <div className="text-center py-6 md:py-8 text-grayscale-500 flex flex-col items-center gap-3">
-        <CircleNotch size={32} className="animate-spin text-blue-base" />
-        <span className="text-sm md:text-base">Carregando links...</span>
-      </div>
+      <LinksListSkeleton />
     </section>
   );
 } 
