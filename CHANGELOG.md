@@ -1,3 +1,11 @@
+## [1.1.1](https://github.com/DanielLevi22/Brev.ly/compare/v1.1.0...v1.1.1) (2025-06-29)
+
+
+### Bug Fixes
+
+* server build ([5133794](https://github.com/DanielLevi22/Brev.ly/commit/51337942837c5b4cabb41a7057481b78d4cf30e0))
+* server build ([6a25692](https://github.com/DanielLevi22/Brev.ly/commit/6a25692425b61f84c902150540e0bf18fd64847a))
+
 # [1.1.0](https://github.com/DanielLevi22/Brev.ly/compare/v1.0.1...v1.1.0) (2025-06-28)
 
 
