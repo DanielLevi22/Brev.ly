@@ -8,4 +8,6 @@ export default {
   dialect: 'postgresql',
   schema: 'src/schemas/*',
   out: 'src/db/migrations',
+  verbose: true,
+  strict: true,
 } satisfies Config
