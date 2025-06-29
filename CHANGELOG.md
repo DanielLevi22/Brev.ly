@@ -1,3 +1,15 @@
+## [1.1.2](https://github.com/DanielLevi22/Brev.ly/compare/v1.1.1...v1.1.2) (2025-06-29)
+
+
+### Bug Fixes
+
+* add new look file ([cfcc254](https://github.com/DanielLevi22/Brev.ly/commit/cfcc2545d307f0b47c473c734c420925b7b3829e))
+* config redirect vercel ([611ceb7](https://github.com/DanielLevi22/Brev.ly/commit/611ceb7db14dd8c1b13ce0b589c0f2b17c1dbe5e))
+* css ([b05e191](https://github.com/DanielLevi22/Brev.ly/commit/b05e191b1bd8d50525d68ccb8fbfb30bdc914878))
+* ensure tailwindcss v4, zod 3.22.4 and compatible resolvers ([a79f1bf](https://github.com/DanielLevi22/Brev.ly/commit/a79f1bfbf0a495d172d4cc22ea42cac66e044a1b))
+* move autoprefixer to dependencies for Vercel build ([9312fb6](https://github.com/DanielLevi22/Brev.ly/commit/9312fb6f98240eba6be9b25528ed5d34b3023f0c))
+* vercel config ([bda4571](https://github.com/DanielLevi22/Brev.ly/commit/bda4571739fdef0504062ac145b28a47ffb6504b))
+
 ## [1.1.1](https://github.com/DanielLevi22/Brev.ly/compare/v1.1.0...v1.1.1) (2025-06-29)
 
 
