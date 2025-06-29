@@ -1,13 +1,13 @@
 // Configuração de ambiente
 export const config = {
   // URL base do frontend
-  FRONTEND_URL: import.meta.env.VITE_FRONTEND_URL || 'http://localhost:5173',
+  FRONTEND_URL: import.meta.env.VITE_FRONTEND_URL || window.location.origin,
   
   // URL base para redirecionamento (pode ser diferente do frontend)
-  REDIRECT_URL: import.meta.env.VITE_REDIRECT_URL || 'http://localhost:5173',
+  REDIRECT_URL: import.meta.env.VITE_REDIRECT_URL || window.location.origin,
   
   // URL base para exibição (domínio público)
-  PUBLIC_URL: import.meta.env.VITE_PUBLIC_URL || 'brev.ly',
+  PUBLIC_URL: import.meta.env.VITE_PUBLIC_URL || window.location.origin,
   
   // URL da API
   API_URL: import.meta.env.VITE_API_URL || 'http://localhost:3333',
@@ -21,7 +21,12 @@ export const config = {
 
 // Função para gerar URL completa do short link
 export function getShortUrl(shortKey: string): string {
-  return `${config.PUBLIC_URL}/${shortKey}`;
+  // Se PUBLIC_URL não tem protocolo, adiciona o protocolo atual
+  const baseUrl = config.PUBLIC_URL.startsWith('http') 
+    ? config.PUBLIC_URL 
+    : `${window.location.protocol}//${config.PUBLIC_URL}`;
+  
+  return `${baseUrl}/${shortKey}`;
 }
 
 // Função para gerar URL de redirecionamento
