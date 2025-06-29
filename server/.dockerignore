@@ -1,0 +1,64 @@
+# Dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Build outputs
+dist/
+build/
+
+# Environment files
+.env*
+!.env.example
+
+# Logs
+*.log
+
+# Coverage
+coverage/
+*.lcov
+.nyc_output
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Git
+.git/
+.gitignore
+
+# Docker
+Dockerfile*
+docker-compose*
+.dockerignore
+
+# Documentation
+README.md
+docs/
+
+# Tests
+*.test.ts
+*.spec.ts
+test/
+tests/
+
+# TypeScript
+*.tsbuildinfo
+tsconfig.json
+
+# Drizzle
+drizzle/
+
+# Temporary files
+*.tmp
+*.temp
+.tmp/
+.temp/ 
