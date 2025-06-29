@@ -21,7 +21,6 @@
 
 body, html {
   font-family: 'Open Sans', sans-serif;
-  touch-action: none;
 }
 
 /* Estilos para corrigir autocomplete do navegador */
