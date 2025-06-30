@@ -17,11 +17,8 @@ RUN pnpm install --no-frozen-lockfile
 # Copiar todo o código do server
 COPY . .
 
-# Buildar o server
-RUN pnpm build
-
-# Prunar dependências para produção (apenas após o build)
-RUN pnpm prune --prod
+# Buildar o server com mais verbosidade
+RUN pnpm build --verbose
 
 # Stage de produção enxuto
 FROM node:20-alpine AS production
@@ -29,8 +26,10 @@ WORKDIR /app
 
 # Copiar apenas arquivos essenciais
 COPY --from=builder /app/dist ./dist
-COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/package.json ./package.json
+
+# Instalar apenas dependências de produção
+RUN npm install --only=production
 
 # Criar usuário não-root
 RUN addgroup -g 1001 -S nodejs && adduser -S nodejs -u 1001
