@@ -8,7 +8,7 @@ import { ApiError } from "@/types/link";
 import { toast } from "sonner";
 
 const createLinkSchema = z.object({
-  originalUrl: z.string().url("Informe uma url válida"),
+  originalUrl: z.string().min(1, "Campo obrigatório").url("Informe uma url válida"),
   shortUrl: z.string()
     .min(1, "Campo obrigatório")
     .regex(/^[a-z0-9-]+$/, "Informe uma url minuscula sem espaço/caractere special.")

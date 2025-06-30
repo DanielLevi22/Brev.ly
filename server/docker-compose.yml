@@ -15,7 +15,7 @@ services:
   #   - DATABASE_URL=${DATABASE_URL}
 
   pg:
-    image: bitnami/postgresql:latest
+    image: postgres:15
     container_name: "brevly-pg"
     restart: unless-stopped
     ports:
@@ -25,7 +25,7 @@ services:
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-postgres}
       - POSTGRES_DB=${POSTGRES_DB:-brevly}
     volumes:
-      - pg_data:/bitnami/postgresql
+      - pg_data:/var/lib/postgresql/data
       - './docker:/docker-entrypoint-initdb.d'
 
 volumes:
