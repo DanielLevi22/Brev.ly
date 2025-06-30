@@ -38,7 +38,7 @@ Um encurtador de URLs moderno e eficiente, construído com React + Vite (fronten
 
 - **Node.js** >= 18.0.0
 - **pnpm** >= 8.0.0
-- **Docker** e **Docker Compose**
+- **Docker** e **Docker Compose** (obrigatório para o banco de dados)
 - **Git**
 
 ### 1. Clone o Repositório
@@ -78,25 +78,51 @@ CLOUDFLARE_BUCKET=seu_bucket
 CLOUDFLARE_PUBLIC_URL=https://seu_dominio.com
 ```
 
-### 3. Iniciar o Banco de Dados
+### 3. Executar o Backend
 
 ```bash
-# Iniciar PostgreSQL via Docker
-pnpm docker:up
+# Desenvolvimento
+pnpm dev                    # Inicia banco + servidor automaticamente
+pnpm docker:up             # Apenas inicia o banco (se necessário)
+pnpm docker:down           # Para o banco
+pnpm docker:restart        # Reinicia o banco
 
-# Executar migrações
+# Banco de dados
+pnpm migrate:dev           # Executa migrações (desenvolvimento)
+pnpm migrate:test          # Executa migrações (testes)
+pnpm migrate:prod          # Executa migrações (produção)
+pnpm db:generate           # Gera novas migrações
+pnpm db:studio             # Abre Drizzle Studio
+
+# Build e produção
+pnpm build                 # Build para produção
+pnpm start                 # Inicia servidor de produção
+
+# Testes
+pnpm test:unit             # Testes unitários
+pnpm test:e2e              # Testes end-to-end
+pnpm test:full             # Todos os testes
+```
+
+**O que o comando `pnpm dev` faz:**
+- ✅ Inicia o container PostgreSQL via Docker
+- ✅ Executa o servidor com hot reload
+- ⚠️ **IMPORTANTE:** Execute as migrações na primeira vez
+
+### 4. Configurar o Banco (Primeira Execução)
+
+**⚠️ IMPORTANTE: Execute as migrações para criar as tabelas no banco**
+
+```bash
+# Em outro terminal, execute as migrações
+cd server
 pnpm migrate:dev
 ```
 
-### 4. Executar o Backend
-
-```bash
-# Desenvolvimento (com hot reload)
-pnpm dev
-
-# Ou iniciar apenas o servidor (se o banco já estiver rodando)
-tsx watch --env-file .env src/server.ts
-```
+**O que as migrações fazem:**
+- Cria a tabela `links` com todas as colunas necessárias
+- Configura índices e constraints
+- Prepara o banco para uso da aplicação
 
 O backend estará disponível em: **http://localhost:3333**
 
@@ -142,8 +168,8 @@ O frontend estará disponível em: **http://localhost:5173**
 
 ```bash
 # Desenvolvimento
-pnpm dev                    # Inicia servidor + banco de dados
-pnpm docker:up             # Apenas inicia o banco
+pnpm dev                    # Inicia banco + servidor automaticamente
+pnpm docker:up             # Apenas inicia o banco (se necessário)
 pnpm docker:down           # Para o banco
 pnpm docker:restart        # Reinicia o banco
 
@@ -229,12 +255,18 @@ cd server && pnpm docker:down -v && pnpm docker:up
 pnpm migrate:dev
 ```
 
-**3. Frontend não conecta com backend:**
+**3. Tabela não existe:**
+```bash
+# Executar migrações para criar as tabelas
+cd server && pnpm migrate:dev
+```
+
+**4. Frontend não conecta com backend:**
 - Verificar se `VITE_API_URL` está correto no `.env`
 - Verificar se o backend está rodando na porta 3333
 - Verificar CORS no backend
 
-**4. Erro de dependências:**
+**5. Erro de dependências:**
 ```bash
 # Limpar cache e reinstalar
 rm -rf node_modules pnpm-lock.yaml
@@ -278,7 +310,7 @@ Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para ma
 
 **Daniel Levi**
 - GitHub: [@DanielLevi22](https://github.com/DanielLevi22)
-- LinkedIn: [Daniel Levi](https://www.linkedin.com/in/daniel-levi-22/)
+- LinkedIn: [Daniel Levi](https://www.linkedin.com/in/daniel-levi-developer/)
 
 ---
 
