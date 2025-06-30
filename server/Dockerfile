@@ -9,10 +9,10 @@ FROM base AS builder
 WORKDIR /app
 
 # Copiar arquivos de dependências do server
-COPY package.json ./
+COPY package.json pnpm-lock.yaml ./
 
 # Instalar dependências
-RUN pnpm install --frozen-lockfile
+RUN pnpm install --no-frozen-lockfile
 
 # Copiar todo o código do server
 COPY . .
