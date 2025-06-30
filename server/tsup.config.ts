@@ -1,4 +1,5 @@
 import { defineConfig } from 'tsup'
+import { resolve } from 'path'
 
 export default defineConfig({
   entry: {
@@ -14,6 +15,11 @@ export default defineConfig({
   outExtension({ format }) {
     return {
       js: '.mjs'
+    }
+  },
+  esbuildOptions(options) {
+    options.alias = {
+      '@': resolve('./src')
     }
   }
 })
