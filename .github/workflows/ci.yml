@@ -41,22 +41,34 @@ jobs:
           node-version: '20'
           cache: 'pnpm'
 
-      - name: Install dependencies
+      - name: Install server dependencies
+        working-directory: ./server
         run: pnpm install
 
       - name: Run database migrations
-        run: pnpm db:migrate:test
+        working-directory: ./server
+        run: pnpm migrate:test
         env:
           DATABASE_URL: postgres://test_user:test_pass@localhost:5432/brevly_test
 
       - name: Run server tests
-        run: pnpm test:server
+        working-directory: ./server
+        run: pnpm test:full
         env:
           DATABASE_URL: postgres://test_user:test_pass@localhost:5432/brevly_test
 
-      - name: Run web tests (optional)
-        run: pnpm test:web
+      - name: Install web dependencies
+        working-directory: ./web
+        run: pnpm install
+
+      - name: Run web tests
+        working-directory: ./web
+        run: pnpm test:run
         continue-on-error: true
+
+      - name: Build web
+        working-directory: ./web
+        run: pnpm build
 
   build:
     name: Build and Push Docker Image
@@ -94,7 +106,7 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
-          context: .
+          context: ./server
           file: ./server/Dockerfile
           push: true
           tags: ${{ steps.meta.outputs.tags }}

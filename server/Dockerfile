@@ -8,29 +8,29 @@ RUN npm install -g pnpm
 FROM base AS builder
 WORKDIR /app
 
-# Copiar arquivos de dependências da raiz e do server
-COPY package.json pnpm-workspace.yaml pnpm-lock.yaml ./
-COPY server/package.json ./server/
-COPY web/package.json ./web/
+# Copiar arquivos de dependências do server
+COPY package.json ./
 
-# Instalar dependências do monorepo
+# Instalar dependências
 RUN pnpm install --frozen-lockfile
 
-# Copiar todo o código e buildar o server
+# Copiar todo o código do server
 COPY . .
-RUN cd server && pnpm build
 
-# Prunar dependências para produção no server
-RUN cd server && pnpm prune --prod
+# Buildar o server
+RUN pnpm build
+
+# Prunar dependências para produção
+RUN pnpm prune --prod
 
 # Stage de produção enxuto
 FROM node:20-alpine AS production
 WORKDIR /app
 
-# Copiar apenas arquivos essenciais do server
-COPY --from=builder /app/server/dist ./dist
-COPY --from=builder /app/server/node_modules ./node_modules
-COPY --from=builder /app/server/package.json ./package.json
+# Copiar apenas arquivos essenciais
+COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/package.json ./package.json
 
 # Criar usuário não-root
 RUN addgroup -g 1001 -S nodejs && adduser -S nodejs -u 1001
