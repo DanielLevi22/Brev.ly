@@ -11,7 +11,7 @@ WORKDIR /app
 # Copiar arquivos de dependências do server
 COPY package.json pnpm-lock.yaml ./
 
-# Instalar dependências
+# Instalar dependências (incluindo devDependencies para build)
 RUN pnpm install --no-frozen-lockfile
 
 # Copiar todo o código do server
@@ -20,7 +20,7 @@ COPY . .
 # Buildar o server
 RUN pnpm build
 
-# Prunar dependências para produção
+# Prunar dependências para produção (apenas após o build)
 RUN pnpm prune --prod
 
 # Stage de produção enxuto
