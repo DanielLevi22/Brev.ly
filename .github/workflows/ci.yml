@@ -131,8 +131,14 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Install semantic-release
-        run: npm install -g semantic-release @semantic-release/git @semantic-release/github @semantic-release/changelog
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: '8'
+
+      - name: Install server dependencies
+        working-directory: ./server
+        run: pnpm install
 
       - name: Configure Git
         run: |
@@ -140,6 +146,7 @@ jobs:
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
 
       - name: Release
+        working-directory: ./server
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: npx semantic-release 
