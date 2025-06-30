@@ -17,8 +17,8 @@ RUN pnpm install --no-frozen-lockfile
 # Copiar todo o código do server
 COPY . .
 
-# Buildar o server com mais verbosidade
-RUN pnpm build --verbose
+# Buildar o server
+RUN pnpm build
 
 # Stage de produção enxuto
 FROM node:20-alpine AS production
