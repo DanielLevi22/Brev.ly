@@ -111,42 +111,4 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
-          cache-to: type=gha,mode=max
-
-  release:
-    name: Create Release
-    runs-on: ubuntu-latest
-    needs: [test, build]
-    if: (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main') && !contains(github.event.head_commit.message, 'ci:') && !contains(github.event.head_commit.message, 'chore:')
-    
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-          token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: '8'
-
-      - name: Install server dependencies
-        working-directory: ./server
-        run: pnpm install
-
-      - name: Configure Git
-        run: |
-          git config --global user.name 'github-actions[bot]'
-          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-
-      - name: Release
-        working-directory: ./server
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: npx semantic-release 
+          cache-to: type=gha,mode=max 

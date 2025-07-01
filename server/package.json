@@ -17,8 +17,7 @@
     "test:full": "pnpm test:unit && pnpm test:e2e",
     "docker:up": "docker-compose up -d",
     "docker:down": "docker-compose down",
-    "docker:restart": "docker-compose down && docker-compose up -d",
-    "release": "semantic-release"
+    "docker:restart": "docker-compose down && docker-compose up -d"
   },
   "keywords": [
     "url-shortener",
@@ -67,14 +66,9 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
-    "@semantic-release/changelog": "^6.0.3",
-    "@semantic-release/git": "^10.0.1",
-    "@semantic-release/github": "^8.0.7",
-    "@semantic-release/npm": "^10.0.4",
     "@types/sanitize-html": "^2.16.0",
     "@types/supertest": "^6.0.3",
     "drizzle-kit": "^0.30.5",
-    "semantic-release": "^21.1.1",
     "supertest": "^7.1.1",
     "tsup": "^8.4.0",
     "typescript": "^5.8.3",
